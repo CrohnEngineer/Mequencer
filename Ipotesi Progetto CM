@@ -1,0 +1,12 @@
+Ipotesi Progetto CM:
+	- Vocoder con parametri controllati OBJ REC (formante e altre cose)
+	- Multieffetto generico
+
+
+	- Sequencer controllato con motion gesture <--- utilizzata per prototipo
+		- 3 loop di batteria (cassa, rullo, charlie)
+		- lowpass filter su master
+		- SC per audio (OSC per gesti)
+		- classificazione gesti start/stop tracce
+		- controllo cutoff filtro con movimento
+		- wekinator (classification/regression)
