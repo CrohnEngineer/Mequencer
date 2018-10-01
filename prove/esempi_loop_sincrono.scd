@@ -44,7 +44,7 @@ p = Ptpar([
             )
         ),
     inf),
-    0.5, Pbind( // CASSA
+    1, Pbind( // CASSA
         \instrument, \bell,
         \accent, -0.6,
         \amp, 0.2,
