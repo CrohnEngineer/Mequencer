@@ -53,7 +53,7 @@ p = Ptpar([
     )
 ], 1).play; //Ptpar genera una sequenza di routine distanziata dell'offset che precede la routine stessa (in questo caso si differenziano di 0.5 e 0.5!
 )
-
+p.isPlaying
 p.stop;
 
 //Pbind examples
