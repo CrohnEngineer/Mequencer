@@ -19,24 +19,19 @@ SynthDef(\singrain, { |freq = 440, amp = 0.2, sustain = 1|
     Out.ar(0, sig ! 2);    // sig ! 2 is the same as [sig, sig]
 }).add;
 
-
-
-f = {
-    Task({
-        loop {
-            [60, 62, 64, 65, 67, 69, 71, 72].do({ |midi|
-                Synth(\oneLoop, [bufnum: b, start: 0, time: 14]);
-            });
-        }
-    });
-};
-
-
 TempoClock.default.tempo = 2.3;
 
-t = f.value;
+p = Ptpar([
+    0, Pbind(
+        \instrument, \oneLoop,
+        \bufnum, b,
+        \amp, 0.4,
+        \start, 0, //sample di inizio della lettura del buffer
+		\time, 14, //sustain time dell'envelope, è uguale al reciproco della durata di un quarto del tempo = 1/4 del 4/4!
+        \dur, 14
+    )
+]); //Ptpar genera una sequenza di routine distanziata dell'offset che precede la routine stessa (in questo caso si differenziano di 0.5 e 0.5!
 
-t.stop;
 
 //task per chiedere pacchetti a synapse
 (
@@ -66,14 +61,13 @@ OSCdef.new(
 	{
 		arg msg;
 		msg.postln;
-		if(t.isPlaying == false && msg[1] == 1)
-		{t.play(quant: 4);};
-		if(t.isPlaying == true && msg[1] == 2)
+		if(p.isPlaying == false && msg[1] == 1)
+		{p.play(quant:4);};
+		if(p.isPlaying == true && msg[1] == 2)
 		{
-			t.stop;
-			t.reset;
+			p.stop;
+			p.reset;
 		};
-
 	},
 	'/wek/event',
 	nil,
