@@ -70,7 +70,8 @@ SynthDef.new(\snare, {
 	\kickpattern,
 	Pbind(
 		\instrument, \kick,
-		\dur, Pseq([0.75, 0.75, 1, 0.75, 0.75], inf),
+		\dur, Pseq([3/4, 3/4, 1, 3/4, 3/4], inf),
+		//\dur, 1,
 		\decayTime, Pseq([0.4, 0.4, 2, 0.4, 0.4], inf),
 		\rate, Pseq([1, 1, 1, 1, 1, 1, 1, 2, 1, 1], inf),
 		\amp, 0.5,
@@ -82,7 +83,7 @@ SynthDef.new(\snare, {
 	\hatclosedpattern,
 	Pbind(
 		\instrument, \hatclosed,
-		\dur, Pseq([0.25], inf),
+		\dur, Pseq([1/4], inf),
 		\rate, Pwhite(0.9, 1, inf),
 		\amp, Pseq([0.1, 0.2, 0.6, 0.6, 0.1, 0.2, 0.6, 0.6], inf),
 		\pan, Pwhite(-0.5, 0.5, inf),
@@ -94,10 +95,10 @@ SynthDef.new(\snare, {
 	\clappattern,
 	Pbind(
 		\instrument, \clap,
-		\dur, Pseq([1, 0.75, 1.25, 1], inf),
+		\dur, Pseq([1], inf),
 		\decayTime, 0.4,
 		\rate, 2,
-		\amp,  Pseq([0, 0.5, 0.7, 0.5], inf),
+		\amp,  Pseq([0, 0.5, 0, 0.5], inf),
 	);
 );
 
