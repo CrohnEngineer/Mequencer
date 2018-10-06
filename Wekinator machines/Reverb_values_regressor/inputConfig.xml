@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<OSCInputGroup>
+  <oscMessage>/wek/lefthand_pos_body</oscMessage>
+  <numInputs>3</numInputs>
+  <groupName>Inputs</groupName>
+  <inputNames>
+    <string>x</string>
+    <string>y</string>
+    <string>z</string>
+  </inputNames>
+</OSCInputGroup>
