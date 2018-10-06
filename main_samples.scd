@@ -1,6 +1,8 @@
 s.boot;
 
 d = Dictionary.new;
+~processing = NetAddr("127.0.0.1", 12001);
+
 (
 var samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
 //var samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
@@ -71,10 +73,10 @@ Pdef(
 	\kickpattern,
 	Pbind(
 		\instrument, \kick,
-		\dur, Pseq([0.75, 0.75, 1, 0.75, 0.75], inf),
+		\dur, Pseq([1], inf),
 		\decayTime, Pseq([0.4, 0.4, 2, 0.4, 0.4], inf),
-		\rate, Pseq([1, 1, 1, 1, 1, 1, 1, 2, 1, 1], inf),
-		\amp, 0.5,
+		\rate, Pseq([1, 1, 1, 1, 1, 1, 1, 1, 1, 1], inf),
+		\amp, 1,
 	);
 );
 
@@ -165,6 +167,7 @@ OSCdef.new(
 		arg msg;
 		if(msg[1] == \forward)
 			{
+			~processing.sendMsg("/kick", \play);
 			if(Pdef(\kickpattern).isPlaying == false)
 			    {
 			        "PLAY".postln;
@@ -288,21 +291,15 @@ OSCdef.new(
 
 b = NetAddr.new("127.0.0.1", 12345);    // create the NetAddr
 b.sendMsg("/righthand", \forward);
+b.sendMsg("/righthand", \up);
 b.sendMsg("/lefthand", \forward);
-Pdef(\bufloop).isPlaying==false;
+b.sendMsg("/lefthand", \up);
 
-
-~kick.play(quant: 4);
-~kick.stop;
-~kick.isPlaying
-
-~hatclosed.play(quant: 4);
-~hatclosed.stop;
-
-~clap.play(quant: 4);
-~clap.stop;
-
-~snare.play(quant: 4);
-~snare.stop;
 
 s.plotTree
+ServerMeter.new(s, 0, 2);
+
+{SinOsc.ar(300+(200*Latch.ar(SinOsc.ar(13.3), Impulse.ar(10))))*0.2}.stop
+
+
+
