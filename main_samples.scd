@@ -1,21 +1,5 @@
 s.boot;
 
-d = Dictionary.new;
-~processing = NetAddr("127.0.0.1", 12001);
-
-(
-var samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
-//var samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
-
-d.add(\808 ->
-	PathName(samplePath).entries.collect({
-	arg sf;
-	Buffer.read(s, sf.fullPath);
-});)
-)
-
-TempoClock.tempo=2.1;
-
 //KICK
 (
 SynthDef.new(\kick, {
@@ -66,14 +50,12 @@ SynthDef.new(\snare, {
 }).add;
 )
 
-
-
 (
 Pdef(
 	\kickpattern,
 	Pbind(
 		\instrument, \kick,
-		\dur, Pseq([1], inf),
+		\dur, Pseq([0.75, 0.75, 1, 0.75, 0.75], inf),
 		\decayTime, Pseq([0.4, 0.4, 2, 0.4, 0.4], inf),
 		\rate, Pseq([1, 1, 1, 1, 1, 1, 1, 1, 1, 1], inf),
 		\amp, 1,
@@ -110,11 +92,29 @@ Pdef(
 		\instrument, \snare,
 		\dur, Pseq([1], inf),
 		\decayTime, 1,
-		\rate, 2,
+		\rate, 1,
 		\amp,  Pseq([0, 0.5], inf),
 	)
 );
 )
+
+
+d = Dictionary.new;
+~processing = NetAddr("127.0.0.1", 12001);
+
+//0 = sample launch mode, 1 = effect mode
+var state = 0;
+
+var samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
+//var samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
+
+d.add(\808 ->
+	PathName(samplePath).entries.collect({
+	arg sf;
+	Buffer.read(s, sf.fullPath);
+});)
+
+TempoClock.tempo=2;
 
 s.plotTree
 
