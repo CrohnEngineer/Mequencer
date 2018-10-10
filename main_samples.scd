@@ -6,8 +6,8 @@ o.blockSize = 128;
 
 (
 
-//~samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
-~samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
+~samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
+//~samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
 
 TempoClock.tempo=2.3;
 d = Dictionary.new;
