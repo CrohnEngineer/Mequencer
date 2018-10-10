@@ -1,13 +1,13 @@
 s.boot;
 o = s.options;
-o.memSize = 4096;
-o.blockSize = 2048;
+o.memSize = 1000000;
+o.blockSize = 128;
 
 
 (
 
-~samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
-//~samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
+//~samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
+~samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
 
 TempoClock.tempo=2.3;
 d = Dictionary.new;
@@ -23,8 +23,8 @@ d = Dictionary.new;
 ~b1 = Bus.audio(s, 2);
 
 //0 = sample launch mode, 1 = effect mode
-~state1 = 0;
-~state2 = 0;
+~state1 = 1;
+~state2 = 1;
 
 d.add(\808 ->
 	PathName(~samplePath).entries.collect({
@@ -339,7 +339,7 @@ OSCdef.new(
 		arg msg;
 		//msg.postln;
 		if(~state2 ==1){
-			y.set(\mix, msg[1], \room, msg[2])
+			y.set(\mix, msg[1], \room, msg[2]);
 			~processing.sendMsg('/reverb_values',msg[1],msg[2]);
 		}{
 			//do nothing
