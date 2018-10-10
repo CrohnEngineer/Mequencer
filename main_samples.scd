@@ -6,8 +6,8 @@ o.blockSize = 128;
 
 (
 
-~samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
-//~samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
+//~samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
+~samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
 
 TempoClock.tempo=2.3;
 d = Dictionary.new;
@@ -322,6 +322,7 @@ OSCdef.new(
 		//msg.postln;
 		if(~state1 ==1){
 			x.set(\cutoff, msg[1].linexp(0,1,100,20000));
+			~processing.sendMsg('/cutoff_value',msg[1]);
 		}{
 			//do nothing
 		};

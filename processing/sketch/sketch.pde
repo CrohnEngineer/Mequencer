@@ -24,6 +24,7 @@ boolean snareIn = false;
 boolean clapIn = false;
 boolean hatClosedIn = false;
 boolean reverbOn = false;
+boolean lpOn = false;
 
 int alphaKick = 0;
 int alphaSnare = 0;
@@ -35,20 +36,31 @@ float ampSnare = 0;
 float ampClap = 0;
 float ampHatClosed = 0;
 float[] reverbValues = new float[2];
+float cutoffValue = 0;
 
 void draw() {
-
-  float revValMap = map(reverbValues[0], 0, 1, 0, 255-62);
-  if (revValMap > 255-62)
-    revValMap = 255-62;
-  background(62 + ((int) revValMap));
+  
+  if (lpOn == true) {
+    float revValMap = map(cutoffValue, 0, 1, 0, 255-62);
+    if (revValMap > 255-62)
+      revValMap = 255-62;
+    background(62 + ((int) revValMap));
+  }
+  
   imageMode(CENTER);
   image(img, width/2, height/5, img.width*2/3, img.height*2/3);
 
-  float randpos = 4;
-  float displacementX = random(-randpos, + randpos);
-  float displacementY = random(-randpos, + randpos);
-
+  float randposX = 4;
+  float randposY = 4;
+  
+  if (reverbOn == true) {
+    randposX = map(reverbValues[1], 0, 2, 4, 40);
+    randposY = map(reverbValues[0], 0, 2, 4, 40);
+    reverbOn = false;
+  }
+  
+  float displacementX = random(-randposX, + randposX);
+  float displacementY = random(-randposY, + randposY);
 
   if (kickIn == true) {
     ampKick = 1;
@@ -159,5 +171,10 @@ void oscEvent(OscMessage theOscMessage) {
     println(theOscMessage.arguments());
     reverbOn = true;
     reverbValues[0] = (float) theOscMessage.arguments()[0];
+    reverbValues[1] = (float) theOscMessage.arguments()[1];
+  }
+  if (theOscMessage.addrPattern().equals("/cutoff_value")) {
+    lpOn = true;
+    cutoffValue = (float) theOscMessage.arguments()[0];
   }
 }
