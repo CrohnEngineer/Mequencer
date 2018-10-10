@@ -2,7 +2,9 @@
 import oscP5.*;
 import netP5.*;
 
-PImage img;
+PImage img;      // The source image
+int cellsize = 2; // Dimensions of each cell in the grid
+int columns, rows;
 
 void setup(){
   size(720, 480);
@@ -10,6 +12,8 @@ void setup(){
   OscP5 oscP5 = new OscP5(this, 12001);
   
   img = loadImage("mequencer_logo.png");
+  columns = img.width / cellsize;  // Calculate # of columns
+  rows = img.height / cellsize;  // Calculate # of rows
   
 }
 
@@ -17,6 +21,7 @@ boolean kickIn = false;
 boolean snareIn = false;
 boolean clapIn = false;
 boolean hatClosedIn = false;
+boolean reverbOn = false;
 
 int alphaKick = 0;
 int alphaSnare = 0;
@@ -27,6 +32,7 @@ float ampKick = 0;
 float ampSnare = 0;
 float ampClap = 0;
 float ampHatClosed = 0;
+float[] reverbValues = new float[2];
 
 void draw(){
   
@@ -74,6 +80,30 @@ void draw(){
   
   if(ampHatClosed < 0)
     ampHatClosed = 0;
+    
+  if(reverbOn == true){
+    for ( int i = 0; i < columns; i++) {
+    // Begin loop for rows
+      for ( int j = 0; j < rows; j++) {
+        int x = i*cellsize + cellsize/2;  // x position
+        int y = j*cellsize + cellsize/2;  // y position
+        int loc = x + y*img.width;  // Pixel array location
+        color c = img.pixels[loc];  // Grab the color
+        // Calculate a z position as a function of mouseX and pixel brightness
+        float mapvalue = map(reverbValues[1], 0, 1, 0, width); 
+        float z = (mapvalue / float(width)) * brightness(img.pixels[loc]) - 20.0;
+        // Translate to the location, set fill and stroke, and draw the rect
+        pushMatrix();
+        translate(x + 200, y + 100, z);
+        fill(c, 204);
+        noStroke();
+        rectMode(CENTER);
+        rect(0, 0, cellsize, cellsize);
+        popMatrix();
+      }
+    }
+    reverbOn = false;
+  }
 
   //KICK
   noStroke();
@@ -145,5 +175,12 @@ void oscEvent(OscMessage theOscMessage) {
   }
   if(theOscMessage.addrPattern().equals("/hatclosed")){
     hatClosedIn = true;
+  }
+  if(theOscMessage.addrPattern().equals("/reverb_values")){
+    println(theOscMessage.arguments());
+    reverbOn = true;
+    reverbValues[0] = (float) theOscMessage.arguments()[0];
+    reverbValues[1] = (float) theOscMessage.arguments()[1];
+    
   }
 }

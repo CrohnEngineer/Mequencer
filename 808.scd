@@ -1,16 +1,16 @@
 s.boot;
 
 d = Dictionary.new;
-
-var samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/";
+(
+//var samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; MAC
+var samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
 
 d.add(\808 ->
 	PathName(samplePath).entries.collect({
 	arg sf;
 	Buffer.read(s, sf.fullPath);
-});
+});)
 )
-
 TempoClock.tempo=2.1;
 
 //KICK

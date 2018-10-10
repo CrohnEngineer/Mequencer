@@ -14,10 +14,10 @@ d = Dictionary.new;
 
 ~synapseSend = NetAddr.new("127.0.0.1", 12345);    // create the NetAddr
 ~synapseReceive = NetAddr.new("127.0.0.1", 12346);    // create the NetAddr
-~wekinator = NetAddr.new("127.0.0.1", 6448);
-~wekinator1 = NetAddr.new("127.0.0.1", 6449);
-~wekinator2 = NetAddr.new("127.0.0.1", 6450);
-~wekinator3 = NetAddr.new("127.0.0.1", 6451);
+~wekinator = NetAddr.new("127.0.0.1", 6448); //indirizzo parametri regressione per cutoff filtro
+~wekinator1 = NetAddr.new("127.0.0.1", 6449); //indirizzo parametri regressione room&mix riverbero
+~wekinator2 = NetAddr.new("127.0.0.1", 6450); //indirizzo parametri classificazione stato filtro
+~wekinator3 = NetAddr.new("127.0.0.1", 6451); //indirizzo parametri classificazione stato riverbero
 ~processing = NetAddr("127.0.0.1", 12001);
 
 ~b1 = Bus.audio(s, 2);
@@ -340,6 +340,7 @@ OSCdef.new(
 		//msg.postln;
 		if(~state2 ==1){
 			y.set(\mix, msg[1], \room, msg[2])
+			~processing.sendMsg('/reverb_values',msg[1],msg[2]);
 		}{
 			//do nothing
 		};
