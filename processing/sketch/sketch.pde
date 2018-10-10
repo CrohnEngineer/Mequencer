@@ -2,21 +2,16 @@
 import oscP5.*;
 import netP5.*;
 
-PImage img;      // The source image
-int cellsize = 2; // Dimensions of each cell in the grid
-int columns, rows;
+PFont dodgeFont;
 
 void setup() {
   size(720, 480);
 
   OscP5 oscP5 = new OscP5(this, 12001);
 
-  img = loadImage("mequencer_logo.png");
-  columns = img.width / cellsize;  // Calculate # of columns
-  rows = img.height / cellsize;  // Calculate # of rows
-  img.loadPixels();
-  loadPixels();
-  
+  dodgeFont= createFont("DODGE", 72);
+  textFont(dodgeFont);
+
 }
 
 boolean kickIn = false;
@@ -39,26 +34,38 @@ float[] reverbValues = new float[2];
 float cutoffValue = 0;
 
 void draw() {
+
+  background(255);
   
+  fill(0);
+  textAlign(CENTER);
+  text("MEQUENCER", width/2, height/4);
+
   if (lpOn == true) {
-    float revValMap = map(cutoffValue, 0, 1, 0, 255-62);
-    if (revValMap > 255-62)
-      revValMap = 255-62;
-    background(62 + ((int) revValMap));
+    float cutoffValMap = map(cutoffValue, 0, 1, 0, 255-62);
+    if (cutoffValMap > 255-62) {
+      cutoffValMap = 255-62;
+    } else if (cutoffValMap < 0) {
+      cutoffValMap = 0;
+    }
+    background(62 + ((int) cutoffValMap));
+    
+    fill(255- (int) cutoffValMap);
+    textAlign(CENTER);
+    text("MEQUENCER", width/2, height/4);
   }
-  
+
   imageMode(CENTER);
-  image(img, width/2, height/5, img.width*2/3, img.height*2/3);
 
   float randposX = 4;
   float randposY = 4;
-  
+
   if (reverbOn == true) {
     randposX = map(reverbValues[1], 0, 2, 4, 40);
     randposY = map(reverbValues[0], 0, 2, 4, 40);
     reverbOn = false;
   }
-  
+
   float displacementX = random(-randposX, + randposX);
   float displacementY = random(-randposY, + randposY);
 

@@ -1,13 +1,9 @@
 s.boot;
-o = s.options;
-o.memSize = 1000000;
-o.blockSize = 128;
-
 
 (
 
-//~samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
-~samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
+~samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
+//~samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
 
 TempoClock.tempo=2.3;
 d = Dictionary.new;
@@ -106,12 +102,12 @@ SynthDef(\reverb, { arg outBus = 0, inBus , pan = 0, mix = 0, room = 1;
 	Out.ar(outBus, Pan2.ar(out, pan))
 }).add;
 
-
-x = Synth.new(\filter, [\inBus, ~b1]);
-y = Synth.after(x,\reverb);
-
 )
 
+(
+x = Synth.new(\filter, [\inBus, ~b1]);
+y = Synth.after(x,\reverb);
+)
 
 (
 
@@ -308,7 +304,7 @@ OSCdef.new(
 	\synapseReceiverReverbParam,
 	{
 		arg msg;
-		~wekinator1.sendMsg('/wek/lefthand_pos_body', msg[1], msg[2], msg[3]);
+		~wekinator1.sendMsg('/wek/lefthand_pos_body', msg[1], msg[2]);
 	},
 	'/lefthand_pos_body',
 	nil,
@@ -363,7 +359,7 @@ OSCdef.new(
 );
 
 OSCdef.new(
-	\synapseReceiverDelayState,
+	\synapseReceiverReverbState,
 	{
 		arg msg;
 		~wekinator3.sendMsg('/wek/lefthand_height', msg[2]);
@@ -406,7 +402,7 @@ r.play;
 ~synapseSend.sendMsg("/righthand", \up);
 ~synapseSend.sendMsg("/lefthand", \forward);
 ~synapseSend.sendMsg("/lefthand", \up);
-
+~state2=1;
 Pdef(\clappattern).play(quant:4);
 Pdef(\clappattern).stop;
 
