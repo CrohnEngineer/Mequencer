@@ -1,4 +1,38 @@
 s.boot;
+o = s.options;
+o.memSize = 4096;
+o.blockSize = 2048;
+
+
+(
+
+~samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
+//~samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
+
+TempoClock.tempo=2.3;
+d = Dictionary.new;
+
+~synapseSend = NetAddr.new("127.0.0.1", 12345);    // create the NetAddr
+~synapseReceive = NetAddr.new("127.0.0.1", 12346);    // create the NetAddr
+~wekinator = NetAddr.new("127.0.0.1", 6448);
+~wekinator1 = NetAddr.new("127.0.0.1", 6449);
+~wekinator2 = NetAddr.new("127.0.0.1", 6450);
+~wekinator3 = NetAddr.new("127.0.0.1", 6451);
+~processing = NetAddr("127.0.0.1", 12001);
+
+~b1 = Bus.audio(s, 2);
+
+//0 = sample launch mode, 1 = effect mode
+~state1 = 0;
+~state2 = 0;
+
+d.add(\808 ->
+	PathName(~samplePath).entries.collect({
+	arg sf;
+	Buffer.read(s, sf.fullPath);
+});)
+
+)
 
 (
 
@@ -29,7 +63,7 @@ SynthDef.new(\hatclosed, {
 //CLAP
 
 SynthDef.new(\clap, {
-	arg rate = 1, amp=1, decayTime = 0, outBus = 0;
+	arg rate = 1, amp=1, decayTime = 1, outBus = 0;
 	var sig, env;
 	sig = PlayBuf.ar(1,4, BufRateScale.ir(4)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
@@ -55,7 +89,7 @@ SynthDef.new(\snare, {
 //LOWPASS FILTER
 
 SynthDef.new(\filter, {
-	arg outBus, inBus, pan = 0, cutoff = 1000;
+	arg outBus, inBus, pan = 0, cutoff = 20000;
 	var input, output;
 	input = In.ar(inBus,2);
 	output = LPF.ar(input, cutoff.lag(0.05), 1, 0);
@@ -72,38 +106,54 @@ SynthDef(\reverb, { arg outBus = 0, inBus , pan = 0, mix = 0, room = 1;
 	Out.ar(outBus, Pan2.ar(out, pan))
 }).add;
 
+
+x = Synth.new(\filter, [\inBus, ~b1]);
+y = Synth.after(x,\reverb);
+
 )
 
 
 (
 
-var b1 = Bus.audio(s, 2);
-var b2 = Bus.audio(s,2);
-x = Synth.new(\filter, [\inBus, b1]);
-y = Synth.after(x,\reverb,);
-
 Pdef(
 	\kickpattern,
-	Pbind(
+    Pbind(
 		\instrument, \kick,
-		\dur, Pseq([0.75, 0.75, 1, 0.75, 0.75], inf),
-		\decayTime, Pseq([0.4, 0.4, 2, 0.4, 0.4], inf),
-		\rate, Pseq([1, 1, 1, 1, 1, 1, 1, 1, 1, 1], inf),
+		\dur, Pseq([0.75, 0.75, 0.50, Rest(0.75), 0.75, 0.50], inf),
+		\decayTime, 0.2,
+		\rate, 1,
 		\amp, 1,
-		\outBus, b1,
+		\outBus, ~b1,
+		\x, Pfunc ({ |evt|
+			if(evt.isRest == false){
+				~processing.sendMsg("/kick", \play);
+			}{
+				~processing.sendMsg("/nokick", \play);
+			}
+		})
 	);
 );
+
 
 
 Pdef(
 	\hatclosedpattern,
 	Pbind(
 		\instrument, \hatclosed,
-		\dur, Pseq([0.25], inf),
-		\rate, Pwhite(0.9, 1, inf),
-		\amp, Pseq([0.1, 0.2, 0.6, 0.6, 0.1, 0.2, 0.6, 0.6], inf),
-		\pan, Pwhite(-0.5, 0.5, inf),
-		\outBus, b1,
+		\dur, Pseq([0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.125, 0.125,
+			0.125, 0.125, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.3333, 0.3333,
+			0.3334], inf),
+		\rate, 1,
+		\amp, Pseq([0.1, 0.3], inf),
+		\pan, Pwhite(-0.2, 0.2, inf),
+		\outBus, ~b1,
+		\x, Pfunc ({ |evt|
+			if(evt.isRest == false){
+				~processing.sendMsg("/hatclosed", \play);
+			}{
+				~processing.sendMsg("/nohatclosed", \play);
+			}
+		})
 	);
 );
 
@@ -112,11 +162,18 @@ Pdef(
 	\clappattern,
 	Pbind(
 		\instrument, \clap,
-		\dur, Pseq([1, 0.75, 1.25, 1], inf),
+		\dur, Pseq([Rest(2), 1, Rest(3), 1, Rest(0.25), 0.75], inf),
 		\decayTime, 0.4,
 		\rate, 2,
-		\amp,  Pseq([0, 0.5, 0.7, 0.5], inf),
-		\outBus, b1,
+		\amp, 1,
+		\outBus, ~b1,
+		\x, Pfunc ({ |evt|
+			if(evt.isRest == false){
+				~processing.sendMsg("/clap", \play);
+			}{
+				~processing.sendMsg("/noclap", \play);
+			}
+		})
 	);
 );
 
@@ -124,39 +181,20 @@ Pdef(
 	\snarepattern,
 	Pbind(
 		\instrument, \snare,
-		\dur, Pseq([1], inf),
+		\dur, Pseq([Rest(2), 1, Rest(1)], inf),
 		\decayTime, 1,
-		\rate, 1,
-		\amp,  Pseq([0, 0.5], inf),
-		\outBus, b1,
+		\rate, 1.5,
+		\amp,  1,
+		\outBus, ~b1,
+		\x, Pfunc ({ |evt|
+			if(evt.isRest == false){
+				~processing.sendMsg("/snare", \play);
+			}{
+				~processing.sendMsg("/nosnare", \play);
+			}
+		})
 	)
 );
-)
-
-(
-d = Dictionary.new;
-~synapseSend = NetAddr.new("127.0.0.1", 12345);    // create the NetAddr
-~synapseReceive = NetAddr.new("127.0.0.1", 12346);    // create the NetAddr
-~wekinator = NetAddr.new("127.0.0.1", 6448);
-~wekinator1 = NetAddr.new("127.0.0.1", 6449);
-~wekinator2 = NetAddr.new("127.0.0.1", 6450);
-~wekinator3 = NetAddr.new("127.0.0.1", 6451);
-~processing = NetAddr("127.0.0.1", 12001);
-
-//0 = sample launch mode, 1 = effect mode
-~state1 = 1;
-~state2 = 1;
-
-var samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
-//var samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
-
-d.add(\808 ->
-	PathName(samplePath).entries.collect({
-	arg sf;
-	Buffer.read(s, sf.fullPath);
-});)
-
-TempoClock.tempo=2;
 )
 
 s.plotTree
@@ -181,12 +219,11 @@ OSCdef.new(
 		arg msg;
 		if(msg[1] == \forward)
 		{
-			~processing.sendMsg("/kick", \play);
 			if(Pdef(\kickpattern).isPlaying == false)
 			    {
 			        "PLAY".postln;
 					msg.postln;
-					Pdef(\kickpattern).play(quant:1);
+					Pdef(\kickpattern).play(quant:4);
 			    }{
 				    "STOP".postln;
 				    Pdef(\kickpattern).stop;
@@ -200,7 +237,7 @@ OSCdef.new(
 			    {
 			        "PLAY".postln;
 					msg.postln;
-					Pdef(\clappattern).play(quant:1);
+					Pdef(\clappattern).play(quant:4);
 			    }{
 				    "STOP".postln;
 				    Pdef(\clappattern).stop;
@@ -225,7 +262,7 @@ OSCdef.new(
 			    {
 			        "PLAY".postln;
 					msg.postln;
-					Pdef(\hatclosedpattern).play(quant:1);
+					Pdef(\hatclosedpattern).play(quant:4);
 			    }{
 				    "STOP".postln;
 				    Pdef(\hatclosedpattern).stop;
@@ -239,7 +276,7 @@ OSCdef.new(
 			    {
 			        "PLAY".postln;
 					msg.postln;
-					Pdef(\snarepattern).play(quant:1);
+				Pdef(\snarepattern).play(quant:4);
 			    }{
 				    "STOP".postln;
 				    Pdef(\snarepattern).stop;
@@ -361,10 +398,17 @@ OSCdef.new(
 
 )
 
-b.sendMsg("/righthand", \forward);
-b.sendMsg("/righthand", \up);
-b.sendMsg("/lefthand", \forward);
-b.sendMsg("/lefthand", \up);
+r.play;
+
+~synapseSend.sendMsg("/righthand", \forward);
+~synapseSend.sendMsg("/righthand", \up);
+~synapseSend.sendMsg("/lefthand", \forward);
+~synapseSend.sendMsg("/lefthand", \up);
+
+Pdef(\clappattern).play(quant:4);
+Pdef(\clappattern).stop;
+
+Tdef(\kickpattern).play(quant:4);
 
 
 s.plotTree
