@@ -119,7 +119,7 @@ Pdef(
 	\kickpattern,
     Pbind(
 		\instrument, \kick,
-		\dur, Pseq([0.75, 0.75, 0.50, Rest(0.75), 0.75, 0.50], inf),
+		\dur, Pseq([2], inf),
 		\decayTime, 0.2,
 		\rate, 1,
 		\amp, 1,
