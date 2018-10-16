@@ -24,8 +24,8 @@ d = Dictionary.new;
 
 d.add(\808 ->
 	PathName(~samplePath).entries.collect({
-	arg sf;
-	Buffer.read(s, sf.fullPath);
+		arg sf;
+		Buffer.read(s, sf.fullPath);
 });)
 
 )
@@ -109,13 +109,16 @@ x = Synth.new(\filter, [\inBus, ~b1]);
 y = Synth.after(x,\reverb);
 )
 
+
+//PATTERNS
 (
+
 
 Pdef(
 	\kickpattern,
-    Pbind(
+	Pbind(
 		\instrument, \kick,
-		\dur, Pseq([1], inf),
+		\dur, Pseq([0.5, 0.5, Rest(0.25), 0.75], inf),
 		\decayTime, 0.2,
 		\rate, 1,
 		\amp, 1,
@@ -136,9 +139,7 @@ Pdef(
 	\hatclosedpattern,
 	Pbind(
 		\instrument, \hatclosed,
-		\dur, Pseq([0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.125, 0.125,
-			0.125, 0.125, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.3333, 0.3333,
-			0.3334], inf),
+		\dur, Pseq([Rest(0.5), 0.5], inf),
 		\rate, 1,
 		\amp, Pseq([0.1, 0.3], inf),
 		\pan, Pwhite(-0.2, 0.2, inf),
@@ -158,7 +159,7 @@ Pdef(
 	\clappattern,
 	Pbind(
 		\instrument, \clap,
-		\dur, Pseq([Rest(2), 1, Rest(3), 1, Rest(0.25), 0.75], inf),
+		\dur, Pseq([Rest(1), 1], inf),
 		\decayTime, 0.4,
 		\rate, 2,
 		\amp, 1,
@@ -216,31 +217,36 @@ OSCdef.new(
 		if(msg[1] == \forward)
 		{
 			if(Pdef(\kickpattern).isPlaying == false)
-			    {
-			        "PLAY".postln;
-					msg.postln;
-					Pdef(\kickpattern).play(quant:4);
-			    }{
-				    "STOP".postln;
-				    Pdef(\kickpattern).stop;
-			    };
-			}{
-			    //do nothing
-			};
-		if(msg[1] == \up)
 			{
-			if(Pdef(\clappattern).isPlaying == false)
-			    {
-			        "PLAY".postln;
-					msg.postln;
-					Pdef(\clappattern).play(quant:4);
-			    }{
-				    "STOP".postln;
-				    Pdef(\clappattern).stop;
-			    };
+				"PLAY".postln;
+				msg.postln;
+				Pdef(\kickpattern).play(quant:4);
+				~processing.sendMsg("/seq_kick", \play);
+
 			}{
-			    //do nothing
+				"STOP".postln;
+				Pdef(\kickpattern).stop;
+				~processing.sendMsg("/seq_kick", \stop);
 			};
+		}{
+			//do nothing
+		};
+		if(msg[1] == \up)
+		{
+			if(Pdef(\clappattern).isPlaying == false)
+			{
+				"PLAY".postln;
+				msg.postln;
+				Pdef(\clappattern).play(quant:4);
+				~processing.sendMsg("/seq_clap", \play);
+			}{
+				"STOP".postln;
+				Pdef(\clappattern).stop;
+				~processing.sendMsg("/seq_clap", \stop);
+			};
+		}{
+			//do nothing
+		};
 	},
 	'/righthand',
 	nil,
@@ -253,33 +259,37 @@ OSCdef.new(
 	{
 		arg msg;
 		if(msg[1] == \forward)
-			{
+		{
 			if(Pdef(\hatclosedpattern).isPlaying == false)
-			    {
-			        "PLAY".postln;
-					msg.postln;
-					Pdef(\hatclosedpattern).play(quant:4);
-			    }{
-				    "STOP".postln;
-				    Pdef(\hatclosedpattern).stop;
-			    };
-			}{
-			    //do nothing
-			};
-		if(msg[1] == \up)
 			{
-			if(Pdef(\snarepattern).isPlaying == false)
-			    {
-			        "PLAY".postln;
-					msg.postln;
-				Pdef(\snarepattern).play(quant:4);
-			    }{
-				    "STOP".postln;
-				    Pdef(\snarepattern).stop;
-			    };
+				"PLAY".postln;
+				msg.postln;
+				Pdef(\hatclosedpattern).play(quant:4);
+				~processing.sendMsg("/seq_hatclosed", \play);
 			}{
-			    //do nothing
+				"STOP".postln;
+				Pdef(\hatclosedpattern).stop;
+				~processing.sendMsg("/seq_hatclosed", \stop);
 			};
+		}{
+			//do nothing
+		};
+		if(msg[1] == \up)
+		{
+			if(Pdef(\snarepattern).isPlaying == false)
+			{
+				"PLAY".postln;
+				msg.postln;
+				Pdef(\snarepattern).play(quant:4);
+				~processing.sendMsg("/seq_snare", \play);
+			}{
+				"STOP".postln;
+				Pdef(\snarepattern).stop;
+				~processing.sendMsg("/seq_snare", \stop);
+			};
+		}{
+			//do nothing
+		};
 	},
 	'/lefthand',
 	nil,
@@ -395,6 +405,23 @@ OSCdef.new(
 );
 
 )
+
+//CLOCK PATTERN
+t = Pdef(
+	\tempoClock,
+	Pbind(
+		\dur, 1/4,
+		\amp, 0,
+		\x, Pfunc {
+			~processing.sendMsg("/tempo", \tempo);
+		}
+	);
+);
+
+t.play(quant:4);
+t.stop;
+
+
 
 ~synapseSend.sendMsg("/righthand", \forward);
 ~synapseSend.sendMsg("/righthand", \up);
