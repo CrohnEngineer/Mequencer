@@ -4,6 +4,61 @@ import netP5.*;
 
 PFont dodgeFont;
 
+//step button object
+class StepButton {
+  boolean isActive;
+  boolean isPlaying;
+  int xpos, ypos, wsize, hsize;
+
+  StepButton(int xpos, int ypos, int wsize, int hsize, boolean isActive) {
+    this.xpos = xpos;
+    this.ypos = ypos;
+    this.wsize = wsize;
+    this.hsize = hsize;
+    this.isActive = isActive;
+  }
+
+  void display() {
+    if (isPlaying == false) {
+      if (isActive == false) {
+        noFill();
+        strokeWeight(4);
+        stroke(255);
+      } else {
+        fill(100);
+        strokeWeight(4);
+        stroke(255);
+      }
+    } else {
+      fill(200);
+      strokeWeight(4);
+      stroke(255);
+    }
+    rect(xpos, ypos, wsize, hsize);
+  }
+
+  void blink() {
+    fill(255);
+    rect(xpos, ypos, wsize, hsize);
+  }
+}
+
+//VARIABLES
+StepButton[] steps1;
+StepButton[] steps2;
+StepButton[] steps3;
+StepButton[] steps4;
+
+//start position of first elements of the sequencers
+float xFirstStepPos1 = width/5 - 50;
+float yFirstStepPos1 = height/3 + 75;
+
+int rows = 4;
+int columns = 4;
+int numberOfSteps = rows*columns;
+int stepDimension = 22;
+int stepSpacing = 4;
+
 void setup() {
   size(720, 480);
 
@@ -11,7 +66,14 @@ void setup() {
 
   dodgeFont= createFont("DODGE", 72);
   textFont(dodgeFont);
-
+  
+  steps1 = new StepButton[numberOfSteps];
+  int index = 0;
+  for (int y = 0; y < rows; y++) {
+    for (int x = 0; x < columns; x++) {
+      steps1[index++] = new StepButton((x * stepDimension) + stepSpacing*7, (y * stepDimension) + stepSpacing*3, stepDimension, stepDimension, false);
+    }
+  }
 }
 
 boolean kickIn = false;
@@ -36,7 +98,7 @@ float cutoffValue = 0;
 void draw() {
 
   background(255);
-  
+
   fill(0);
   textAlign(CENTER);
   text("MEQUENCER", width/2, height/4);
@@ -49,7 +111,7 @@ void draw() {
       cutoffValMap = 0;
     }
     background(62 + ((int) cutoffValMap));
-    
+
     fill(255- (int) cutoffValMap);
     textAlign(CENTER);
     text("MEQUENCER", width/2, height/4);

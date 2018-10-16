@@ -5,7 +5,7 @@ s.boot;
 ~samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
 //~samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
 
-TempoClock.tempo=2.3;
+TempoClock.tempo=130/60;
 d = Dictionary.new;
 
 ~synapseSend = NetAddr.new("127.0.0.1", 12345);    // create the NetAddr
@@ -115,7 +115,7 @@ Pdef(
 	\kickpattern,
     Pbind(
 		\instrument, \kick,
-		\dur, Pseq([2], inf),
+		\dur, Pseq([1], inf),
 		\decayTime, 0.2,
 		\rate, 1,
 		\amp, 1,
@@ -396,18 +396,10 @@ OSCdef.new(
 
 )
 
-r.play;
-
 ~synapseSend.sendMsg("/righthand", \forward);
 ~synapseSend.sendMsg("/righthand", \up);
 ~synapseSend.sendMsg("/lefthand", \forward);
 ~synapseSend.sendMsg("/lefthand", \up);
-~state2=1;
-Pdef(\clappattern).play(quant:4);
-Pdef(\clappattern).stop;
-
-Tdef(\kickpattern).play(quant:4);
-
 
 s.plotTree
 ServerMeter.new(s, 0, 2);
