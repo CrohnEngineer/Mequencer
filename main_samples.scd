@@ -68,11 +68,11 @@ SynthDef.new(\clap, {
 }).add;
 
 SynthDef.new(\sinegrain,
-    { arg out=0, freq=440, sustain=0.02;
-        var env;
-        env = EnvGen.kr(Env.perc(0.001, sustain), 1, doneAction: Done.freeSelf);
-        Out.ar(out, SinOsc.ar(freq, 0, env * 0.1))
-    }).add;
+	{ arg out=0, freq=440, sustain=0.02;
+		var env;
+		env = EnvGen.kr(Env.perc(0.001, sustain), 1, doneAction: Done.freeSelf);
+		Out.ar(out, SinOsc.ar(freq, 0, env * 0.1))
+}).add;
 
 //SNARE
 
@@ -117,7 +117,7 @@ Pdefn(\dur1,Pseq([2],inf));
 
 Pdef(
 	\pattern1,
-    Pbind(
+	Pbind(
 		\instrument, Pfunc({ |e| e.instrument}),
 		\dur, Pdefn(\dur1),
 		\decayTime, 0.2,
@@ -135,8 +135,8 @@ Pdef(
 );
 
 Pdefn(\dur2,Pseq([0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.125, 0.125,
-			0.125, 0.125, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.3333, 0.3333,
-			0.3334], inf));
+	0.125, 0.125, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.3333, 0.3333,
+	0.3334], inf));
 
 Pdef(
 	\pattern2,
@@ -237,15 +237,18 @@ OSCdef.new(
 		if(msg[1] == \forward)
 		{
 			if(Pdef(\pattern1).isPlaying == false)
-			    {
-			        "PLAY".postln;
-					msg.postln;
-					Pdef(\pattern1).play(quant:4);
-				    ~processing.sendMsg("/seq_kick", \play);
-			    }{
-				    "STOP".postln;
-				    Pdef(\pattern1).stop;
-				   ~processing.sendMsg("/seq_kick", \stop);
+			{
+				"PLAY".postln;
+				msg.postln;
+				Pdef(\pattern1).play(quant:4);
+				Routine.new({
+					~processing.sendMsg("/seq_kick", "play");
+					"y".postln;
+				}).play(quant:4);
+			}{
+				"STOP".postln;
+				Pdef(\pattern1).stop;
+				~processing.sendMsg("/seq_kick", "stop");
 			};
 		}{
 			//do nothing
@@ -253,15 +256,15 @@ OSCdef.new(
 		if(msg[1] == \up)
 		{
 			if(Pdef(\pattern3).isPlaying == false)
-			    {
-			        "PLAY".postln;
-					msg.postln;
-					Pdef(\pattern3).play(quant:4);
-					~processing.sendMsg("/seq_clap", \play);
-			    }{
-				    "STOP".postln;
-				    Pdef(\pattern3).stop;
-				    ~processing.sendMsg("/seq_clap", \stop);
+			{
+				"PLAY".postln;
+				msg.postln;
+				Pdef(\pattern3).play(quant:4);
+				~processing.sendMsg("/seq_clap", \play);
+			}{
+				"STOP".postln;
+				Pdef(\pattern3).stop;
+				~processing.sendMsg("/seq_clap", \stop);
 			};
 		}{
 			//do nothing
@@ -280,15 +283,15 @@ OSCdef.new(
 		if(msg[1] == \forward)
 		{
 			if(Pdef(\pattern2).isPlaying == false)
-			    {
-			        "PLAY".postln;
-					msg.postln;
-					Pdef(\pattern2).play(quant:4);
-				    ~processing.sendMsg("/seq_hatclosed", \play);
-			    }{
-				    "STOP".postln;
-				    Pdef(\pattern2).stop;
-				    ~processing.sendMsg("/seq_hatclosed", \stop);
+			{
+				"PLAY".postln;
+				msg.postln;
+				Pdef(\pattern2).play(quant:4);
+				~processing.sendMsg("/seq_hatclosed", \play);
+			}{
+				"STOP".postln;
+				Pdef(\pattern2).stop;
+				~processing.sendMsg("/seq_hatclosed", \stop);
 			};
 		}{
 			//do nothing
@@ -296,15 +299,15 @@ OSCdef.new(
 		if(msg[1] == \up)
 		{
 			if(Pdef(\pattern4).isPlaying == false)
-			    {
-			        "PLAY".postln;
-					msg.postln;
-				    Pdef(\pattern4).play(quant:4);
-					~processing.sendMsg("/seq_snare", \play);
-			    }{
-				    "STOP".postln;
-				    Pdef(\pattern4).stop;
-				    ~processing.sendMsg("/seq_snare", \stop);
+			{
+				"PLAY".postln;
+				msg.postln;
+				Pdef(\pattern4).play(quant:4);
+				~processing.sendMsg("/seq_snare", \play);
+			}{
+				"STOP".postln;
+				Pdef(\pattern4).stop;
+				~processing.sendMsg("/seq_snare", \stop);
 			};
 		}{
 			//do nothing
@@ -318,26 +321,26 @@ OSCdef.new(
 
 /*//OSCdef per ricevere pacchetti da synapse e mandarli a wekinator (mano destra)
 OSCdef.new(
-	\synapseReceiverFilterParam,
-	{
-		arg msg;
-		~wekinator.sendMsg('/wek/righthand_pos_body', msg[1], msg[2], msg[3]);
-	},
-	'/righthand_pos_body',
-	nil,
-	12345
+\synapseReceiverFilterParam,
+{
+arg msg;
+~wekinator.sendMsg('/wek/righthand_pos_body', msg[1], msg[2], msg[3]);
+},
+'/righthand_pos_body',
+nil,
+12345
 );
 
 //OSCdef per ricevere pacchetti da synapse e mandarli a wekinator (mano destra)
 OSCdef.new(
-	\synapseReceiverReverbParam,
-	{
-		arg msg;
-		~wekinator1.sendMsg('/wek/lefthand_pos_body', msg[1], msg[2]);
-	},
-	'/lefthand_pos_body',
-	nil,
-	12345
+\synapseReceiverReverbParam,
+{
+arg msg;
+~wekinator1.sendMsg('/wek/lefthand_pos_body', msg[1], msg[2]);
+},
+'/lefthand_pos_body',
+nil,
+12345
 );*/
 
 //OSC function for setting the low-pass filter cutoff frequence values received from Wekinator
@@ -419,8 +422,9 @@ Pdef(\clappattern).play(quant:4);
 Pdef(\pattern1).set(\instrument,\kick);
 Pdef(\pattern2).set(\instrument,\hatclosed);
 Pdefn(\dur3,Pseq([0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.125, 0.125,
-			0.125, 0.125, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.3333, 0.3333,
+	0.125, 0.125, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.3333, 0.3333,
 	0.3334], inf));
+Pdefn(\dur1,Pseq([1], inf));
 Pdef(\pattern3).stop;
 Pdefn(\dur3,Pseq([Rest(2), 1, Rest(3), 1, Rest(0.25), 0.75], inf));
 Pdef(\pattern3).play(quant:4);

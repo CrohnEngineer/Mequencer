@@ -10,7 +10,7 @@ class StepButton {
   boolean isPlaying;
   int xpos, ypos, wsize, hsize;
 
-  StepButton(int xpos, int ypos, int wsize, int hsize, boolean isActive, boolean isPLaying) {
+  StepButton(int xpos, int ypos, int wsize, int hsize, boolean isActive, boolean isPlaying) {
     this.xpos = xpos;
     this.ypos = ypos;
     this.wsize = wsize;
@@ -44,12 +44,41 @@ class StepButton {
   }
 }
 
-//VARIABLES
-StepButton[] steps1;
-StepButton[] steps2;
-StepButton[] steps3;
-StepButton[] steps4;
-int playingStep = 0;
+class Sequence {
+  boolean isPlaying;
+  StepButton[] steps;
+  int playingStep;
+  
+  Sequence(boolean isPlaying, StepButton[] steps, int playingStep){
+    this.isPlaying = isPlaying;
+    this.steps = steps;
+    this.playingStep = playingStep;
+  }
+  
+  void nextStep(){
+    steps[playingStep].isPlaying = false; 
+    if(playingStep <= 14)
+      playingStep += 1;
+    else
+      playingStep = 0;
+    steps[playingStep].isPlaying = true; 
+  }
+  
+  void displayStep(){
+    for(int i = 0; i<steps.length; i++){
+      steps[i].display();
+    }
+  }
+  
+  void play(){
+    playingStep = 0;
+    isPlaying = true;
+  }
+  
+  void stop(){
+    isPlaying = false;  
+  }
+}
 
 //start position of first elements of the sequencers
 float xFirstStepPos1 = width/5 - 50;
@@ -61,6 +90,9 @@ int numberOfSteps = rows*columns;
 int stepDimension = 22;
 int stepSpacing = 4;
 
+Sequence sequence1;
+
+
 void setup() {
   size(720, 480);
 
@@ -69,11 +101,11 @@ void setup() {
   dodgeFont= createFont("DODGE", 72);
   textFont(dodgeFont);
   
-  steps1 = new StepButton[numberOfSteps];
+  sequence1 = new Sequence(false, new StepButton[numberOfSteps], 0);  
   int index = 0;
   for (int y = 0; y < rows; y++) {
     for (int x = 0; x < columns; x++) {
-      steps1[index++] = new StepButton(100 + x*30, 350 + y*30, stepDimension, stepDimension, false, false);
+      sequence1.steps[index++] = new StepButton(100 + x*30, 350 + y*30, stepDimension, stepDimension, false, false);
     }
   }
 }
@@ -213,11 +245,7 @@ void draw() {
   fill(255, alphaHatClosed);
   rect(width*4/5 + displacementX*ampHatClosed, height/2 + displacementY*ampHatClosed, 100, 100, 7);
   
-  for (int i = 0; i < numberOfSteps; i++) {
-    if (i==playingStep)
-      steps1[i].isPlaying = true;
-    steps1[i].display();
-  }
+  sequence1.displayStep();
 
   alphaKick = alphaKick - 40;
   alphaSnare = alphaSnare - 40;
@@ -232,12 +260,15 @@ void draw() {
 
 void oscEvent(OscMessage theOscMessage) {
   if (theOscMessage.addrPattern().equals("/tempo")) {
-    steps1[playingStep].isPlaying = false; 
-    if(playingStep <= 14)
-      playingStep += 1;
-    else
-      playingStep = 0;
+    if (sequence1.isPlaying == true)
+      sequence1.nextStep(); 
   }
+  if (theOscMessage.addrPattern().equals("/seq_kick")) {
+    if (theOscMessage.arguments()[0].equals("play"))
+      sequence1.play();
+    else if (theOscMessage.arguments()[0].equals("stop"))
+      sequence1.stop();
+  }  
   if (theOscMessage.addrPattern().equals("/kick")) {
     kickIn = true;
   }
