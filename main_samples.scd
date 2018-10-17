@@ -134,9 +134,7 @@ Pdef(
 	);
 );
 
-Pdefn(\dur2,Pseq([0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.125, 0.125,
-	0.125, 0.125, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.3333, 0.3333,
-	0.3334], inf));
+Pdefn(\dur2,Pseq([Rest(0.5), 0.5], inf));
 
 Pdef(
 	\pattern2,
@@ -157,7 +155,7 @@ Pdef(
 	);
 );
 
-Pdefn(\dur3,Pseq([Rest(2), 1, Rest(3), 1, Rest(0.25), 0.75], inf));
+Pdefn(\dur3,Pseq([Rest(1), 1], inf));
 
 Pdef(
 	\pattern3,
@@ -166,7 +164,7 @@ Pdef(
 		\dur, Pdefn(\dur3),
 		\decayTime, 0.4,
 		\rate, 2,
-		\amp, 1,
+		\amp, Pwhite(0.4, 0.6, inf),
 		\outBus, ~b1,
 		\x, Pfunc ({ |evt|
 			if(evt.isRest == false){
@@ -187,7 +185,7 @@ Pdef(
 		\dur, Pdefn(\dur4),
 		\decayTime, 1,
 		\rate, 1.5,
-		\amp,  1,
+		\amp,  0.7,
 		\outBus, ~b1,
 		\x, Pfunc ({ |evt|
 			if(evt.isRest == false){
@@ -434,7 +432,23 @@ Pdef(\clappattern).play(quant:4);
 
 Pdef(\pattern1).set(\instrument,\kick);
 Pdef(\pattern2).set(\instrument,\hatclosed);
-Pdefn(\dur3,Pseq([0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.125, 0.125,
+
+//PATTERNS
+Pdefn(\dur1,Pseq([1], inf));
+Pdefn(\dur2,Pseq([0.5], inf));
+Pdefn(\dur2,Pseq([0.25], inf));
+Pdefn(\dur1,Pseq([1, Rest(0.5), 1.5, 1], inf));
+Pdefn(\dur2,Pseq([Rest(0.5), 0.5], inf));//LEVARE
+Pdefn(\dur2,Pseq([Rest(0.5), 0.25, 0.25], inf));//LEVARE
+Pdefn(\dur3,Pseq([0.5, 0.5, Rest(0.25), 0.75], inf));//
+Pdefn(\dur4,Pseq([Rest(1), 1], inf));
+Pdefn(\dur4,Pseq([Rest(2), 2], inf));
+
+
+
+
+
+Pdefn(\dur1,Pseq([0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.125, 0.125,
 	0.125, 0.125, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.3333, 0.3333,
 	0.3334], inf));
 Pdefn(\dur1,Pseq([1], inf));
