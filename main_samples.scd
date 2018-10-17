@@ -241,37 +241,27 @@ OSCdef.new(
 			        "PLAY".postln;
 					msg.postln;
 					Pdef(\pattern1).play(quant:4);
+				    ~processing.sendMsg("/seq_kick", \play);
 			    }{
 				    "STOP".postln;
 				    Pdef(\pattern1).stop;
-			    };
-				~processing.sendMsg("/seq_kick", \play);
-			}{
-				"STOP".postln;
-				Pdef(\kickpattern).stop;
-				~processing.sendMsg("/seq_kick", \stop);
+				   ~processing.sendMsg("/seq_kick", \stop);
 			};
 		}{
 			//do nothing
 		};
 		if(msg[1] == \up)
 		{
-			if(Pdef(\clappattern).isPlaying == false)
-			{
 			if(Pdef(\pattern3).isPlaying == false)
 			    {
 			        "PLAY".postln;
 					msg.postln;
 					Pdef(\pattern3).play(quant:4);
+					~processing.sendMsg("/seq_clap", \play);
 			    }{
 				    "STOP".postln;
 				    Pdef(\pattern3).stop;
-			    };
-				~processing.sendMsg("/seq_clap", \play);
-			}{
-				"STOP".postln;
-				Pdef(\clappattern).stop;
-				~processing.sendMsg("/seq_clap", \stop);
+				    ~processing.sendMsg("/seq_clap", \stop);
 			};
 		}{
 			//do nothing
@@ -289,44 +279,32 @@ OSCdef.new(
 		arg msg;
 		if(msg[1] == \forward)
 		{
-			if(Pdef(\hatclosedpattern).isPlaying == false)
-			{
 			if(Pdef(\pattern2).isPlaying == false)
 			    {
 			        "PLAY".postln;
 					msg.postln;
 					Pdef(\pattern2).play(quant:4);
+				    ~processing.sendMsg("/seq_hatclosed", \play);
 			    }{
 				    "STOP".postln;
 				    Pdef(\pattern2).stop;
-			    };
-				~processing.sendMsg("/seq_hatclosed", \play);
-			}{
-				"STOP".postln;
-				Pdef(\hatclosedpattern).stop;
-				~processing.sendMsg("/seq_hatclosed", \stop);
+				    ~processing.sendMsg("/seq_hatclosed", \stop);
 			};
 		}{
 			//do nothing
 		};
 		if(msg[1] == \up)
 		{
-			if(Pdef(\snarepattern).isPlaying == false)
-			{
 			if(Pdef(\pattern4).isPlaying == false)
 			    {
 			        "PLAY".postln;
 					msg.postln;
-				Pdef(\pattern4).play(quant:4);
+				    Pdef(\pattern4).play(quant:4);
+					~processing.sendMsg("/seq_snare", \play);
 			    }{
 				    "STOP".postln;
 				    Pdef(\pattern4).stop;
-			    };
-				~processing.sendMsg("/seq_snare", \play);
-			}{
-				"STOP".postln;
-				Pdef(\snarepattern).stop;
-				~processing.sendMsg("/seq_snare", \stop);
+				    ~processing.sendMsg("/seq_snare", \stop);
 			};
 		}{
 			//do nothing
