@@ -435,14 +435,25 @@ Pdef(\pattern2).set(\instrument,\hatclosed);
 
 //PATTERNS
 Pdefn(\dur1,Pseq([1], inf));
-Pdefn(\dur2,Pseq([0.5], inf));
-Pdefn(\dur2,Pseq([0.25], inf));
+Pdefn(\dur1,Pseq([0.5], inf));
+Pdefn(\dur1,Pseq([0.25], inf));
+Pdefn(\dur1,Pseq([1, 1, 1.25, 0.25, 0.50], inf));
 Pdefn(\dur1,Pseq([1, Rest(0.5), 1.5, 1], inf));
-Pdefn(\dur2,Pseq([Rest(0.5), 0.5], inf));//LEVARE
-Pdefn(\dur2,Pseq([Rest(0.5), 0.25, 0.25], inf));//LEVARE
-Pdefn(\dur3,Pseq([0.5, 0.5, Rest(0.25), 0.75], inf));//
-Pdefn(\dur4,Pseq([Rest(1), 1], inf));
-Pdefn(\dur4,Pseq([Rest(2), 2], inf));
+Pdefn(\dur1,Pseq([1, Rest(1.5), 1.5], inf));//DRUM AND BASS
+Pdefn(\dur1,Pseq([Rest(0.5), 0.5], inf));
+Pdefn(\dur1,Pseq([Rest(0.5), 0.25, 0.25], inf));
+Pdefn(\dur1,Pseq([0.5, 0.5, Rest(0.25), 0.75], inf));
+Pdefn(\dur1,Pseq([0.75, 0.75, 0.75, 1.75], inf));
+Pdefn(\dur1,Pseq([Rest(1), 1], inf));
+Pdefn(\dur1,Pseq([Rest(2), 2], inf));
+Pdefn(\dur1,Pseq([0.5, Rest(1.5), 0.5, 0.5, Rest(1.5), 1, 1.5, Rest(0.5), 0.5], inf));
+Pdefn(\dur1,Pseq([0.25, 0.25, 0.25, 1.25, 0.25, Rest(0.25), 0.25, 0.50, 0.50, 0.25], inf));
+Pdefn(\dur1,Pseq([0.5, 0.5, Rest(0.75), 0.25, 0.5, 0.5, Rest(1)], inf));
+Pdefn(\dur1,Pseq([Rest(0.50), 0.75, 0.25, Rest(0.75), 0.25, 0.5, 1], inf));
+
+
+
+
 
 
 
