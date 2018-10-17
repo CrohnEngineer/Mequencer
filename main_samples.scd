@@ -5,7 +5,7 @@ s.boot;
 //~samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
 ~samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
 
-TempoClock.tempo=2.3;
+TempoClock.tempo=130/60;
 d = Dictionary.new;
 
 ~synapseSend = NetAddr.new("127.0.0.1", 12345);    // create the NetAddr
@@ -21,8 +21,8 @@ d = Dictionary.new;
 
 d.add(\808 ->
 	PathName(~samplePath).entries.collect({
-	arg sf;
-	Buffer.read(s, sf.fullPath);
+		arg sf;
+		Buffer.read(s, sf.fullPath);
 });)
 
 )
@@ -245,10 +245,18 @@ OSCdef.new(
 				    "STOP".postln;
 				    Pdef(\pattern1).stop;
 			    };
+				~processing.sendMsg("/seq_kick", \play);
 			}{
-			    //do nothing
+				"STOP".postln;
+				Pdef(\kickpattern).stop;
+				~processing.sendMsg("/seq_kick", \stop);
 			};
+		}{
+			//do nothing
+		};
 		if(msg[1] == \up)
+		{
+			if(Pdef(\clappattern).isPlaying == false)
 			{
 			if(Pdef(\pattern3).isPlaying == false)
 			    {
@@ -259,9 +267,15 @@ OSCdef.new(
 				    "STOP".postln;
 				    Pdef(\pattern3).stop;
 			    };
+				~processing.sendMsg("/seq_clap", \play);
 			}{
-			    //do nothing
+				"STOP".postln;
+				Pdef(\clappattern).stop;
+				~processing.sendMsg("/seq_clap", \stop);
 			};
+		}{
+			//do nothing
+		};
 	},
 	'/righthand',
 	nil,
@@ -274,6 +288,8 @@ OSCdef.new(
 	{
 		arg msg;
 		if(msg[1] == \forward)
+		{
+			if(Pdef(\hatclosedpattern).isPlaying == false)
 			{
 			if(Pdef(\pattern2).isPlaying == false)
 			    {
@@ -284,10 +300,18 @@ OSCdef.new(
 				    "STOP".postln;
 				    Pdef(\pattern2).stop;
 			    };
+				~processing.sendMsg("/seq_hatclosed", \play);
 			}{
-			    //do nothing
+				"STOP".postln;
+				Pdef(\hatclosedpattern).stop;
+				~processing.sendMsg("/seq_hatclosed", \stop);
 			};
+		}{
+			//do nothing
+		};
 		if(msg[1] == \up)
+		{
+			if(Pdef(\snarepattern).isPlaying == false)
 			{
 			if(Pdef(\pattern4).isPlaying == false)
 			    {
@@ -298,9 +322,15 @@ OSCdef.new(
 				    "STOP".postln;
 				    Pdef(\pattern4).stop;
 			    };
+				~processing.sendMsg("/seq_snare", \play);
 			}{
-			    //do nothing
+				"STOP".postln;
+				Pdef(\snarepattern).stop;
+				~processing.sendMsg("/seq_snare", \stop);
 			};
+		}{
+			//do nothing
+		};
 	},
 	'/lefthand',
 	nil,
@@ -384,7 +414,22 @@ OSCdef.new(
 
 )
 
-r.play;
+//CLOCK PATTERN
+t = Pdef(
+	\tempoClock,
+	Pbind(
+		\dur, 1/4,
+		\amp, 0,
+		\x, Pfunc {
+			~processing.sendMsg("/tempo", \tempo);
+		}
+	);
+);
+
+t.play(quant:4);
+t.stop;
+
+
 
 ~synapseSend.sendMsg("/righthand", \forward);
 ~synapseSend.sendMsg("/righthand", \up);
