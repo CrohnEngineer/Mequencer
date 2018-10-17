@@ -2,16 +2,16 @@ s.boot;
 
 (
 
-//~samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
-~samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
+~samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
+//~samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
 
 TempoClock.tempo=130/60;
 d = Dictionary.new;
 
 ~synapseSend = NetAddr.new("127.0.0.1", 12345);    // create the NetAddr
 ~synapseReceive = NetAddr.new("127.0.0.1", 12346);    // create the NetAddr
-// ~wekinator = NetAddr.new("127.0.0.1", 6448); //indirizzo parametri regressione per cutoff filtro
-// ~wekinator1 = NetAddr.new("127.0.0.1", 6449); //indirizzo parametri regressione room&mix riverbero
+~wekinator = NetAddr.new("127.0.0.1", 6448); //Wekinator port for sending the righthand position
+~wekinator1 = NetAddr.new("127.0.0.1", 6449); //Wekinator port for sending the lefthand position
 ~processing = NetAddr("127.0.0.1", 12001);
 
 ~b1 = Bus.audio(s, 2);
@@ -318,30 +318,44 @@ OSCdef.new(
 	12345
 );
 
-
-/*//OSCdef per ricevere pacchetti da synapse e mandarli a wekinator (mano destra)
 OSCdef.new(
-\synapseReceiverFilterParam,
+	\synapseReceiverAll,
+	{
+		arg time;
+		time.postln;
+	},
+	'*',
+	nil,
+	12345
+);
+
+
+
+//OSCdef for forwarding the righthand position to Wekinator
+OSCdef.new(
+\scForwardRHpos,
 {
 arg msg;
-~wekinator.sendMsg('/wek/righthand_pos_body', msg[1], msg[2], msg[3]);
+		~wekinator.sendMsg('/wek/righthand_pos_body', msg[1], msg[2], msg[3]);
+		//msg.postln;
 },
-'/righthand_pos_body',
+	'/righthand_pos_body',
 nil,
 12345
 );
 
-//OSCdef per ricevere pacchetti da synapse e mandarli a wekinator (mano destra)
+//OSCdef for forwarding the lefthand position to Wekinator
 OSCdef.new(
-\synapseReceiverReverbParam,
+\scForwardLHpos,
 {
 arg msg;
-~wekinator1.sendMsg('/wek/lefthand_pos_body', msg[1], msg[2]);
+		~wekinator1.sendMsg('/wek/lefthand_pos_body', msg[1], msg[2]);
+		//msg.postln;
 },
 '/lefthand_pos_body',
 nil,
 12345
-);*/
+);
 
 //OSC function for setting the low-pass filter cutoff frequence values received from Wekinator
 OSCdef.new(
@@ -385,7 +399,7 @@ OSCdef.new(
 	\enterEffectState,
 	{
 		arg msg;
-		msg.postln;
+		//msg.postln;
 		~state = msg[1];
 	},
 	'/effect_mode',
@@ -409,7 +423,6 @@ t = Pdef(
 
 t.play(quant:4);
 t.stop;
-
 
 
 ~synapseSend.sendMsg("/righthand", \forward);
