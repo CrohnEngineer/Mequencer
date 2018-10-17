@@ -2,25 +2,22 @@ s.boot;
 
 (
 
-~samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
-//~samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
+//~samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
+~samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
 
 TempoClock.tempo=2.3;
 d = Dictionary.new;
 
 ~synapseSend = NetAddr.new("127.0.0.1", 12345);    // create the NetAddr
 ~synapseReceive = NetAddr.new("127.0.0.1", 12346);    // create the NetAddr
-~wekinator = NetAddr.new("127.0.0.1", 6448); //indirizzo parametri regressione per cutoff filtro
-~wekinator1 = NetAddr.new("127.0.0.1", 6449); //indirizzo parametri regressione room&mix riverbero
-~wekinator2 = NetAddr.new("127.0.0.1", 6450); //indirizzo parametri classificazione stato filtro
-~wekinator3 = NetAddr.new("127.0.0.1", 6451); //indirizzo parametri classificazione stato riverbero
+// ~wekinator = NetAddr.new("127.0.0.1", 6448); //indirizzo parametri regressione per cutoff filtro
+// ~wekinator1 = NetAddr.new("127.0.0.1", 6449); //indirizzo parametri regressione room&mix riverbero
 ~processing = NetAddr("127.0.0.1", 12001);
 
 ~b1 = Bus.audio(s, 2);
 
 //0 = sample launch mode, 1 = effect mode
-~state1 = 1;
-~state2 = 1;
+~state = 1;
 
 d.add(\808 ->
 	PathName(~samplePath).entries.collect({
@@ -31,6 +28,8 @@ d.add(\808 ->
 )
 
 (
+
+//Clips synth definitions
 
 //KICK
 
@@ -68,6 +67,12 @@ SynthDef.new(\clap, {
 	Out.ar(outBus, Pan2.ar(sig, 0, 1));
 }).add;
 
+SynthDef.new(\sinegrain,
+    { arg out=0, freq=440, sustain=0.02;
+        var env;
+        env = EnvGen.kr(Env.perc(0.001, sustain), 1, doneAction: Done.freeSelf);
+        Out.ar(out, SinOsc.ar(freq, 0, env * 0.1))
+    }).add;
 
 //SNARE
 
@@ -105,17 +110,16 @@ SynthDef(\reverb, { arg outBus = 0, inBus , pan = 0, mix = 0, room = 1;
 )
 
 (
-x = Synth.new(\filter, [\inBus, ~b1]);
-y = Synth.after(x,\reverb);
-)
 
-(
+//Pattern definitions
+
+Pdefn(\dur1,Pseq([2],inf));
 
 Pdef(
-	\kickpattern,
+	\pattern1,
     Pbind(
-		\instrument, \kick,
-		\dur, Pseq([2], inf),
+		\instrument, Pfunc({ |e| e.instrument}),
+		\dur, Pdefn(\dur1),
 		\decayTime, 0.2,
 		\rate, 1,
 		\amp, 1,
@@ -130,15 +134,15 @@ Pdef(
 	);
 );
 
-
+Pdefn(\dur2,Pseq([0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.125, 0.125,
+			0.125, 0.125, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.3333, 0.3333,
+			0.3334], inf));
 
 Pdef(
-	\hatclosedpattern,
+	\pattern2,
 	Pbind(
-		\instrument, \hatclosed,
-		\dur, Pseq([0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.125, 0.125,
-			0.125, 0.125, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.3333, 0.3333,
-			0.3334], inf),
+		\instrument, Pfunc({ |e| e.instrument}),
+		\dur, Pdefn(\dur2),
 		\rate, 1,
 		\amp, Pseq([0.1, 0.3], inf),
 		\pan, Pwhite(-0.2, 0.2, inf),
@@ -153,12 +157,13 @@ Pdef(
 	);
 );
 
+Pdefn(\dur3,Pseq([Rest(2), 1, Rest(3), 1, Rest(0.25), 0.75], inf));
 
 Pdef(
-	\clappattern,
+	\pattern3,
 	Pbind(
-		\instrument, \clap,
-		\dur, Pseq([Rest(2), 1, Rest(3), 1, Rest(0.25), 0.75], inf),
+		\instrument, Pfunc({ |e| e.instrument}),
+		\dur, Pdefn(\dur3),
 		\decayTime, 0.4,
 		\rate, 2,
 		\amp, 1,
@@ -173,11 +178,13 @@ Pdef(
 	);
 );
 
+Pdefn(\dur4,Pseq([Rest(2), 1, Rest(1)], inf));
+
 Pdef(
-	\snarepattern,
+	\pattern4,
 	Pbind(
-		\instrument, \snare,
-		\dur, Pseq([Rest(2), 1, Rest(1)], inf),
+		\instrument, Pfunc({ |e| e.instrument}),
+		\dur, Pdefn(\dur4),
 		\decayTime, 1,
 		\rate, 1.5,
 		\amp,  1,
@@ -191,13 +198,27 @@ Pdef(
 		})
 	)
 );
-)
 
-s.plotTree
+)
 
 (
 
-//chiede a synapse posizione mano destra
+//Filters instantiation and instrument default initialization for each pattern
+
+x = Synth.new(\filter, [\inBus, ~b1]);
+y = Synth.after(x,\reverb);
+
+Pdef(\pattern1).set(\instrument,\kick);
+Pdef(\pattern2).set(\instrument,\hatclosed);
+Pdef(\pattern3).set(\instrument,\clap);
+Pdef(\pattern4).set(\instrument,\snare);
+)
+
+(
+
+//OSC packets functions
+
+//Keep alive packets (sent for keeping Synapse sending OSC messages with events and tracking parameters)
 ~trackRH = Task.new({
 	{
 		~synapseReceive.sendMsg("/righthand_trackjointpos", 1);
@@ -208,35 +229,35 @@ s.plotTree
 }).play;
 
 
-//traccia eventi mano destra synapse
+//OSC functions for responding to the right hand's events (play/stop pattern 1 and pattern 3)
 OSCdef.new(
 	\trackRH,
 	{
 		arg msg;
 		if(msg[1] == \forward)
 		{
-			if(Pdef(\kickpattern).isPlaying == false)
+			if(Pdef(\pattern1).isPlaying == false)
 			    {
 			        "PLAY".postln;
 					msg.postln;
-					Pdef(\kickpattern).play(quant:4);
+					Pdef(\pattern1).play(quant:4);
 			    }{
 				    "STOP".postln;
-				    Pdef(\kickpattern).stop;
+				    Pdef(\pattern1).stop;
 			    };
 			}{
 			    //do nothing
 			};
 		if(msg[1] == \up)
 			{
-			if(Pdef(\clappattern).isPlaying == false)
+			if(Pdef(\pattern3).isPlaying == false)
 			    {
 			        "PLAY".postln;
 					msg.postln;
-					Pdef(\clappattern).play(quant:4);
+					Pdef(\pattern3).play(quant:4);
 			    }{
 				    "STOP".postln;
-				    Pdef(\clappattern).stop;
+				    Pdef(\pattern3).stop;
 			    };
 			}{
 			    //do nothing
@@ -247,35 +268,35 @@ OSCdef.new(
 	12345
 );
 
-//traccia eventi mano sinistra synapse
+//OSC functions for responding to the left hand's events (play/stop pattern 2 and pattern 4)
 OSCdef.new(
 	\trackLH,
 	{
 		arg msg;
 		if(msg[1] == \forward)
 			{
-			if(Pdef(\hatclosedpattern).isPlaying == false)
+			if(Pdef(\pattern2).isPlaying == false)
 			    {
 			        "PLAY".postln;
 					msg.postln;
-					Pdef(\hatclosedpattern).play(quant:4);
+					Pdef(\pattern2).play(quant:4);
 			    }{
 				    "STOP".postln;
-				    Pdef(\hatclosedpattern).stop;
+				    Pdef(\pattern2).stop;
 			    };
 			}{
 			    //do nothing
 			};
 		if(msg[1] == \up)
 			{
-			if(Pdef(\snarepattern).isPlaying == false)
+			if(Pdef(\pattern4).isPlaying == false)
 			    {
 			        "PLAY".postln;
 					msg.postln;
-				Pdef(\snarepattern).play(quant:4);
+				Pdef(\pattern4).play(quant:4);
 			    }{
 				    "STOP".postln;
-				    Pdef(\snarepattern).stop;
+				    Pdef(\pattern4).stop;
 			    };
 			}{
 			    //do nothing
@@ -287,7 +308,7 @@ OSCdef.new(
 );
 
 
-//OSCdef per ricevere pacchetti da synapse e mandarli a wekinator (mano destra)
+/*//OSCdef per ricevere pacchetti da synapse e mandarli a wekinator (mano destra)
 OSCdef.new(
 	\synapseReceiverFilterParam,
 	{
@@ -309,14 +330,15 @@ OSCdef.new(
 	'/lefthand_pos_body',
 	nil,
 	12345
-);
+);*/
 
+//OSC function for setting the low-pass filter cutoff frequence values received from Wekinator
 OSCdef.new(
 	\wekiReceiverRight,
 	{
 		arg msg;
 		//msg.postln;
-		if(~state1 ==1){
+		if(~state ==1){
 			x.set(\cutoff, msg[1].linexp(0,1,100,20000));
 			~processing.sendMsg('/cutoff_value',msg[1]);
 		}{
@@ -329,13 +351,13 @@ OSCdef.new(
 );
 
 
-//OSCdef per ricevere cutoff freq da wekinator
+//OSC function for setting the reverb room and mix values received from Wekinator
 OSCdef.new(
 	\wekiReceiverLeft,
 	{
 		arg msg;
 		//msg.postln;
-		if(~state2 ==1){
+		if(~state ==1){
 			y.set(\mix, msg[1], \room, msg[2]);
 			~processing.sendMsg('/reverb_values',msg[1],msg[2]);
 		}{
@@ -347,49 +369,15 @@ OSCdef.new(
 	12000
 );
 
+//OSC function for entering/exiting the effect mode through the touchOSC app
 OSCdef.new(
-	\synapseReceiverFilterState,
-	{
-		arg msg;
-		~wekinator2.sendMsg('/wek/righthand_height', msg[2]);
-	},
-	'/righthand_pos_body',
-	nil,
-	12345
-);
-
-OSCdef.new(
-	\synapseReceiverReverbState,
-	{
-		arg msg;
-		~wekinator3.sendMsg('/wek/lefthand_height', msg[2]);
-	},
-	'/lefthand_pos_body',
-	nil,
-	12345
-);
-
-//switcha effect mode wekinator
-OSCdef.new(
-	\enterFilterState,
+	\enterEffectState,
 	{
 		arg msg;
 		msg.postln;
-		~state1 = msg[1];
+		~state = msg[1];
 	},
-	'/wek/change_filter_state',
-	nil,
-	12000
-);
-
-OSCdef.new(
-	\enterReverbState,
-	{
-		arg msg;
-		msg.postln;
-		~state2 = msg[1];
-	},
-	'/wek/change_reverb_state',
+	'/effect_mode',
 	nil,
 	12000
 );
@@ -402,12 +390,17 @@ r.play;
 ~synapseSend.sendMsg("/righthand", \up);
 ~synapseSend.sendMsg("/lefthand", \forward);
 ~synapseSend.sendMsg("/lefthand", \up);
-~state2=1;
+
 Pdef(\clappattern).play(quant:4);
-Pdef(\clappattern).stop;
 
-Tdef(\kickpattern).play(quant:4);
-
+Pdef(\pattern1).set(\instrument,\kick);
+Pdef(\pattern2).set(\instrument,\hatclosed);
+Pdefn(\dur3,Pseq([0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.125, 0.125,
+			0.125, 0.125, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.3333, 0.3333,
+	0.3334], inf));
+Pdef(\pattern3).stop;
+Pdefn(\dur3,Pseq([Rest(2), 1, Rest(3), 1, Rest(0.25), 0.75], inf));
+Pdef(\pattern3).play(quant:4);
 
 s.plotTree
 ServerMeter.new(s, 0, 2);
