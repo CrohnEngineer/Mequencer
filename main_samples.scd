@@ -5,7 +5,7 @@ s.boot;
 ~samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
 //~samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
 
-TempoClock.tempo=130/60;
+TempoClock.tempo=172/60;
 d = Dictionary.new;
 
 ~synapseSend = NetAddr.new("127.0.0.1", 12345);    // create the NetAddr
@@ -45,7 +45,7 @@ t.play(quant:4);
 //SAMPLE1
 
 SynthDef.new(\sample1, {
-	arg rate = 1, amp=1, decayTime = 0, outBus = 0;
+	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
 	sig = PlayBuf.ar(1,0, BufRateScale.ir(0)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
@@ -58,18 +58,18 @@ SynthDef.new(\sample1, {
 //SAMPLE2
 
 SynthDef.new(\sample2, {
-	arg rate = 1, amp=1, pan=0, outBus = 0;
+	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig;
 	sig = PlayBuf.ar(1,1, BufRateScale.ir(1)*rate, doneAction: 2);
 	sig = sig * amp;
-	Out.ar(outBus, Pan2.ar(sig, pan, 1));
+	Out.ar(outBus, Pan2.ar(sig, 0, 1));
 }).add;
 
 
 //SAMPLE3
 
 SynthDef.new(\sample3, {
-	arg rate = 1, amp=1, decayTime = 1, outBus = 0;
+	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
 	sig = PlayBuf.ar(1,2, BufRateScale.ir(2)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
@@ -81,7 +81,7 @@ SynthDef.new(\sample3, {
 //SAMPLE4
 
 SynthDef.new(\sample4, {
-	arg rate = 1, amp=1, decayTime=0, outBus = 0;
+	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
 	sig = PlayBuf.ar(1,3, BufRateScale.ir(3)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
@@ -93,7 +93,7 @@ SynthDef.new(\sample4, {
 //SAMPLE5
 
 SynthDef.new(\sample5, {
-	arg rate = 1, amp=1, decayTime=0, outBus = 0;
+	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
 	sig = PlayBuf.ar(1,4, BufRateScale.ir(4)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
@@ -105,7 +105,7 @@ SynthDef.new(\sample5, {
 //SAMPLE6
 
 SynthDef.new(\sample6, {
-	arg rate = 1, amp=1, decayTime=0, outBus = 0;
+	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
 	sig = PlayBuf.ar(1,5, BufRateScale.ir(5)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
@@ -117,7 +117,7 @@ SynthDef.new(\sample6, {
 //SAMPLE7
 
 SynthDef.new(\sample7, {
-	arg rate = 1, amp=1, decayTime=0, outBus = 0;
+	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
 	sig = PlayBuf.ar(1,6, BufRateScale.ir(6)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
@@ -129,7 +129,7 @@ SynthDef.new(\sample7, {
 //SAMPLE8
 
 SynthDef.new(\sample8, {
-	arg rate = 1, amp=1, decayTime=0, outBus = 0;
+	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
 	sig = PlayBuf.ar(1,7, BufRateScale.ir(7)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
@@ -141,7 +141,7 @@ SynthDef.new(\sample8, {
 //SAMPLE9
 
 SynthDef.new(\sample9, {
-	arg rate = 1, amp=1, decayTime=0, outBus = 0;
+	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
 	sig = PlayBuf.ar(1,8, BufRateScale.ir(8)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
@@ -153,7 +153,7 @@ SynthDef.new(\sample9, {
 //SAMPLE10
 
 SynthDef.new(\sample10, {
-	arg rate = 1, amp=1, decayTime=0, outBus = 0;
+	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
 	sig = PlayBuf.ar(1,9, BufRateScale.ir(9)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
@@ -165,7 +165,7 @@ SynthDef.new(\sample10, {
 //SAMPLE11
 
 SynthDef.new(\sample11, {
-	arg rate = 1, amp=1, decayTime=0, outBus = 0;
+	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
 	sig = PlayBuf.ar(1,10, BufRateScale.ir(10)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
@@ -177,7 +177,7 @@ SynthDef.new(\sample11, {
 //SAMPLE12
 
 SynthDef.new(\sample12, {
-	arg rate = 1, amp=1, decayTime=0, outBus = 0;
+	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
 	sig = PlayBuf.ar(1,11, BufRateScale.ir(11)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
@@ -189,7 +189,7 @@ SynthDef.new(\sample12, {
 //SAMPLE13
 
 SynthDef.new(\sample13, {
-	arg rate = 1, amp=1, decayTime=0, outBus = 0;
+	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
 	sig = PlayBuf.ar(1,12, BufRateScale.ir(12)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
@@ -201,7 +201,7 @@ SynthDef.new(\sample13, {
 //SAMPLE14
 
 SynthDef.new(\sample14, {
-	arg rate = 1, amp=1, decayTime=0, outBus = 0;
+	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
 	sig = PlayBuf.ar(1,13, BufRateScale.ir(13)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
@@ -213,7 +213,7 @@ SynthDef.new(\sample14, {
 //SAMPLE15
 
 SynthDef.new(\sample15, {
-	arg rate = 1, amp=1, decayTime=0, outBus = 0;
+	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
 	sig = PlayBuf.ar(1,14, BufRateScale.ir(14)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
@@ -225,7 +225,7 @@ SynthDef.new(\sample15, {
 //SAMPLE16
 
 SynthDef.new(\sample16, {
-	arg rate = 1, amp=1, decayTime=0, outBus = 0;
+	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
 	sig = PlayBuf.ar(1,15, BufRateScale.ir(15)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
@@ -267,7 +267,7 @@ Pdef(
 		\dur, Pdefn(\dur1),
 		\decayTime, 0.5,
 		\rate, 1,
-		\amp, 1,
+		\amp, 0.3,
 		\outBus, ~b1,
 		\x, Pfunc ({ |evt|
 			if(evt.isRest == false){
@@ -288,7 +288,7 @@ Pdef(
 		\dur, Pdefn(\dur2),
 		\decayTime, 0.5,
 		\rate, 1,
-		\amp, 1,
+		\amp, 0.3,
 		\outBus, ~b1,
 		\x, Pfunc ({ |evt|
 			if(evt.isRest == false){
@@ -309,7 +309,7 @@ Pdef(
 		\dur, Pdefn(\dur3),
 		\decayTime, 0.5,
 		\rate, 1,
-		\amp, 1,
+		\amp, 0.3,
 		\outBus, ~b1,
 		\x, Pfunc ({ |evt|
 			if(evt.isRest == false){
@@ -330,7 +330,7 @@ Pdef(
 		\dur, Pdefn(\dur4),
 		\decayTime, 0.5,
 		\rate, 1,
-		\amp, 1,
+		\amp, 0.3,
 		\outBus, ~b1,
 		\x, Pfunc ({ |evt|
 			if(evt.isRest == false){
@@ -348,10 +348,10 @@ Pdef(
 x = Synth.new(\filter, [\inBus, ~b1]);
 y = Synth.after(x,\reverb);
 
-Pdef(\pattern1).set(\instrument,\sample1);
-Pdef(\pattern2).set(\instrument,\sample2);
-Pdef(\pattern3).set(\instrument,\sample3);
-Pdef(\pattern4).set(\instrument,\sample4);
+Pdef(\pattern1).set(\instrument,\sample8);
+Pdef(\pattern2).set(\instrument,\sample4);
+Pdef(\pattern3).set(\instrument,\sample16);
+Pdef(\pattern4).set(\instrument,\sample14);
 
 
 //PATTERNS

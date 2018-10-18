@@ -665,16 +665,16 @@ void oscEvent(OscMessage theOscMessage) {
     else if (theOscMessage.arguments()[0].equals("stop"))
       sequence4.stop();
     break;    
-  case "sample1":
+  case "/sample1":
     sampleIn[0] = true;
     break;
-  case "sample2":
+  case "/sample2":
     sampleIn[1] = true;
     break;
-  case "sample3":
+  case "/sample3":
     sampleIn[2] = true;
     break;
-  case "sample4":
+  case "/sample4":
     sampleIn[3] = true;
     break;
   case "/reverb_values":
