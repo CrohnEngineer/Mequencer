@@ -556,10 +556,10 @@ void draw() {
   sequence3.displayStep();
   sequence4.displayStep();
 
-  alphaSample[0] = alphaSample[0] - 40;
-  alphaSample[1] = alphaSample[1] - 40;
-  alphaSample[2] = alphaSample[2] - 40;
-  alphaSample[3] = alphaSample[3] - 40;
+  alphaSample[0] -= 40;
+  alphaSample[1] -= 40;
+  alphaSample[2] -= 40;
+  alphaSample[3] -= 40;
 
   ampSample[0] -= 0.1;
   ampSample[1] -= 0.1;
