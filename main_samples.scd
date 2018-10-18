@@ -23,17 +23,28 @@ d.add(\808 ->
 	PathName(~samplePath).entries.collect({
 		arg sf;
 		Buffer.read(s, sf.fullPath);
-});)
+}););
 
-)
+//CLOCK PATTERN
+t = Pdef(
+	\tempoClock,
+	Pbind(
+		\dur, 1/4,
+		\amp, 0,
+		\x, Pfunc {
+			~processing.sendMsg("/tempo", \tempo);
+		}
+	);
+);
 
-(
+t.play(quant:4);
+
 
 //Clips synth definitions
 
-//KICK
+//SAMPLE1
 
-SynthDef.new(\kick, {
+SynthDef.new(\sample1, {
 	arg rate = 1, amp=1, decayTime = 0, outBus = 0;
 	var sig, env;
 	sig = PlayBuf.ar(1,0, BufRateScale.ir(0)*rate, doneAction: 2);
@@ -44,21 +55,45 @@ SynthDef.new(\kick, {
 }).add;
 
 
-//CLOSED HAT
+//SAMPLE2
 
-SynthDef.new(\hatclosed, {
+SynthDef.new(\sample2, {
 	arg rate = 1, amp=1, pan=0, outBus = 0;
 	var sig;
-	sig = PlayBuf.ar(1,2, BufRateScale.ir(2)*rate, doneAction: 2);
+	sig = PlayBuf.ar(1,1, BufRateScale.ir(1)*rate, doneAction: 2);
 	sig = sig * amp;
 	Out.ar(outBus, Pan2.ar(sig, pan, 1));
 }).add;
 
 
-//CLAP
+//SAMPLE3
 
-SynthDef.new(\clap, {
+SynthDef.new(\sample3, {
 	arg rate = 1, amp=1, decayTime = 1, outBus = 0;
+	var sig, env;
+	sig = PlayBuf.ar(1,2, BufRateScale.ir(2)*rate, doneAction: 2);
+	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
+	sig = sig * env;
+	sig = sig * amp;
+	Out.ar(outBus, Pan2.ar(sig, 0, 1));
+}).add;
+
+//SAMPLE4
+
+SynthDef.new(\sample4, {
+	arg rate = 1, amp=1, decayTime=0, outBus = 0;
+	var sig, env;
+	sig = PlayBuf.ar(1,3, BufRateScale.ir(3)*rate, doneAction: 2);
+	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
+	sig = sig * env;
+	sig = sig * amp;
+	Out.ar(outBus, Pan2.ar(sig, 0, 1));
+}).add;
+
+//SAMPLE5
+
+SynthDef.new(\sample5, {
+	arg rate = 1, amp=1, decayTime=0, outBus = 0;
 	var sig, env;
 	sig = PlayBuf.ar(1,4, BufRateScale.ir(4)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
@@ -67,16 +102,129 @@ SynthDef.new(\clap, {
 	Out.ar(outBus, Pan2.ar(sig, 0, 1));
 }).add;
 
-SynthDef.new(\sinegrain,
-	{ arg out=0, freq=440, sustain=0.02;
-		var env;
-		env = EnvGen.kr(Env.perc(0.001, sustain), 1, doneAction: Done.freeSelf);
-		Out.ar(out, SinOsc.ar(freq, 0, env * 0.1))
+//SAMPLE6
+
+SynthDef.new(\sample6, {
+	arg rate = 1, amp=1, decayTime=0, outBus = 0;
+	var sig, env;
+	sig = PlayBuf.ar(1,5, BufRateScale.ir(5)*rate, doneAction: 2);
+	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
+	sig = sig * env;
+	sig = sig * amp;
+	Out.ar(outBus, Pan2.ar(sig, 0, 1));
 }).add;
 
-//SNARE
+//SAMPLE7
 
-SynthDef.new(\snare, {
+SynthDef.new(\sample7, {
+	arg rate = 1, amp=1, decayTime=0, outBus = 0;
+	var sig, env;
+	sig = PlayBuf.ar(1,6, BufRateScale.ir(6)*rate, doneAction: 2);
+	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
+	sig = sig * env;
+	sig = sig * amp;
+	Out.ar(outBus, Pan2.ar(sig, 0, 1));
+}).add;
+
+//SAMPLE8
+
+SynthDef.new(\sample8, {
+	arg rate = 1, amp=1, decayTime=0, outBus = 0;
+	var sig, env;
+	sig = PlayBuf.ar(1,7, BufRateScale.ir(7)*rate, doneAction: 2);
+	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
+	sig = sig * env;
+	sig = sig * amp;
+	Out.ar(outBus, Pan2.ar(sig, 0, 1));
+}).add;
+
+//SAMPLE9
+
+SynthDef.new(\sample9, {
+	arg rate = 1, amp=1, decayTime=0, outBus = 0;
+	var sig, env;
+	sig = PlayBuf.ar(1,8, BufRateScale.ir(8)*rate, doneAction: 2);
+	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
+	sig = sig * env;
+	sig = sig * amp;
+	Out.ar(outBus, Pan2.ar(sig, 0, 1));
+}).add;
+
+//SAMPLE10
+
+SynthDef.new(\sample10, {
+	arg rate = 1, amp=1, decayTime=0, outBus = 0;
+	var sig, env;
+	sig = PlayBuf.ar(1,9, BufRateScale.ir(9)*rate, doneAction: 2);
+	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
+	sig = sig * env;
+	sig = sig * amp;
+	Out.ar(outBus, Pan2.ar(sig, 0, 1));
+}).add;
+
+//SAMPLE11
+
+SynthDef.new(\sample11, {
+	arg rate = 1, amp=1, decayTime=0, outBus = 0;
+	var sig, env;
+	sig = PlayBuf.ar(1,10, BufRateScale.ir(10)*rate, doneAction: 2);
+	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
+	sig = sig * env;
+	sig = sig * amp;
+	Out.ar(outBus, Pan2.ar(sig, 0, 1));
+}).add;
+
+//SAMPLE12
+
+SynthDef.new(\sample12, {
+	arg rate = 1, amp=1, decayTime=0, outBus = 0;
+	var sig, env;
+	sig = PlayBuf.ar(1,11, BufRateScale.ir(11)*rate, doneAction: 2);
+	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
+	sig = sig * env;
+	sig = sig * amp;
+	Out.ar(outBus, Pan2.ar(sig, 0, 1));
+}).add;
+
+//SAMPLE13
+
+SynthDef.new(\sample13, {
+	arg rate = 1, amp=1, decayTime=0, outBus = 0;
+	var sig, env;
+	sig = PlayBuf.ar(1,12, BufRateScale.ir(12)*rate, doneAction: 2);
+	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
+	sig = sig * env;
+	sig = sig * amp;
+	Out.ar(outBus, Pan2.ar(sig, 0, 1));
+}).add;
+
+//SAMPLE14
+
+SynthDef.new(\sample14, {
+	arg rate = 1, amp=1, decayTime=0, outBus = 0;
+	var sig, env;
+	sig = PlayBuf.ar(1,13, BufRateScale.ir(13)*rate, doneAction: 2);
+	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
+	sig = sig * env;
+	sig = sig * amp;
+	Out.ar(outBus, Pan2.ar(sig, 0, 1));
+}).add;
+
+//SAMPLE15
+
+SynthDef.new(\sample15, {
+	arg rate = 1, amp=1, decayTime=0, outBus = 0;
+	var sig, env;
+	sig = PlayBuf.ar(1,14, BufRateScale.ir(14)*rate, doneAction: 2);
+	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
+	sig = sig * env;
+	sig = sig * amp;
+	Out.ar(outBus, Pan2.ar(sig, 0, 1));
+}).add;
+
+//SAMPLE16
+
+SynthDef.new(\sample16, {
 	arg rate = 1, amp=1, decayTime=0, outBus = 0;
 	var sig, env;
 	sig = PlayBuf.ar(1,15, BufRateScale.ir(15)*rate, doneAction: 2);
@@ -107,9 +255,6 @@ SynthDef(\reverb, { arg outBus = 0, inBus , pan = 0, mix = 0, room = 1;
 	Out.ar(outBus, Pan2.ar(out, pan))
 }).add;
 
-)
-
-(
 
 //Pattern definitions
 
@@ -120,15 +265,15 @@ Pdef(
 	Pbind(
 		\instrument, Pfunc({ |e| e.instrument}),
 		\dur, Pdefn(\dur1),
-		\decayTime, 0.2,
+		\decayTime, 0.5,
 		\rate, 1,
 		\amp, 1,
 		\outBus, ~b1,
 		\x, Pfunc ({ |evt|
 			if(evt.isRest == false){
-				~processing.sendMsg("/kick", \play);
+				~processing.sendMsg("/sample1", \play);
 			}{
-				~processing.sendMsg("/nokick", \play);
+				~processing.sendMsg("/pause1");
 			}
 		})
 	);
@@ -141,15 +286,15 @@ Pdef(
 	Pbind(
 		\instrument, Pfunc({ |e| e.instrument}),
 		\dur, Pdefn(\dur2),
+		\decayTime, 0.5,
 		\rate, 1,
-		\amp, Pseq([0.1, 0.3], inf),
-		\pan, Pwhite(-0.2, 0.2, inf),
+		\amp, 1,
 		\outBus, ~b1,
 		\x, Pfunc ({ |evt|
 			if(evt.isRest == false){
-				~processing.sendMsg("/hatclosed", \play);
+				~processing.sendMsg("/sample2", \play);
 			}{
-				~processing.sendMsg("/nohatclosed", \play);
+				~processing.sendMsg("/pause2");
 			}
 		})
 	);
@@ -162,15 +307,15 @@ Pdef(
 	Pbind(
 		\instrument, Pfunc({ |e| e.instrument}),
 		\dur, Pdefn(\dur3),
-		\decayTime, 0.4,
-		\rate, 2,
-		\amp, Pwhite(0.4, 0.6, inf),
+		\decayTime, 0.5,
+		\rate, 1,
+		\amp, 1,
 		\outBus, ~b1,
 		\x, Pfunc ({ |evt|
 			if(evt.isRest == false){
-				~processing.sendMsg("/clap", \play);
+				~processing.sendMsg("/sample3", \play);
 			}{
-				~processing.sendMsg("/noclap", \play);
+				~processing.sendMsg("/pause3");
 			}
 		})
 	);
@@ -183,36 +328,70 @@ Pdef(
 	Pbind(
 		\instrument, Pfunc({ |e| e.instrument}),
 		\dur, Pdefn(\dur4),
-		\decayTime, 1,
-		\rate, 1.5,
-		\amp,  0.7,
+		\decayTime, 0.5,
+		\rate, 1,
+		\amp, 1,
 		\outBus, ~b1,
 		\x, Pfunc ({ |evt|
 			if(evt.isRest == false){
-				~processing.sendMsg("/snare", \play);
+				~processing.sendMsg("/sample4", \play);
 			}{
-				~processing.sendMsg("/nosnare", \play);
+				~processing.sendMsg("/pause4");
 			}
 		})
 	)
 );
 
-)
-
-(
 
 //Filters instantiation and instrument default initialization for each pattern
 
 x = Synth.new(\filter, [\inBus, ~b1]);
 y = Synth.after(x,\reverb);
 
-Pdef(\pattern1).set(\instrument,\kick);
-Pdef(\pattern2).set(\instrument,\hatclosed);
-Pdef(\pattern3).set(\instrument,\clap);
-Pdef(\pattern4).set(\instrument,\snare);
-)
+Pdef(\pattern1).set(\instrument,\sample1);
+Pdef(\pattern2).set(\instrument,\sample2);
+Pdef(\pattern3).set(\instrument,\sample3);
+Pdef(\pattern4).set(\instrument,\sample4);
 
-(
+
+//PATTERNS
+p = [
+	[1],
+	[0.5],
+	[0.25],
+	[1, 1, 1.25, 0.25, 0.50],
+	[1, Rest(0.5), 1.5, 1],
+	[1, Rest(1.5), 1.5],
+	[Rest(0.5), 0.5],
+	[Rest(0.5), 0.25, 0.25],
+	[0.5, 0.5, Rest(0.25), 0.75],
+	[0.75, 0.75, 0.75, 1.75],
+	[Rest(1), 1],
+	[Rest(2), 2],
+	[0.5, Rest(1.5), 0.5, 0.5, Rest(1)],
+	[0.25, 0.25, 0.25, 1.25, 0.25, Rest(0.25), 0.25, 0.50, 0.50, 0.25],
+	[0.5, 0.5, Rest(0.75), 0.25, 0.5, 0.5, Rest(1)],
+	[Rest(0.50), 0.75, 0.25, Rest(0.75), 0.25, 0.5, 1]
+];
+
+i = [
+	\sample1,
+	\sample2,
+	\sample3,
+	\sample4,
+	\sample5,
+	\sample6,
+	\sample7,
+	\sample8,
+	\sample9,
+	\sample10,
+	\sample11,
+	\sample12,
+	\sample13,
+	\sample14,
+	\sample15,
+	\sample16
+];
 
 //OSC packets functions
 
@@ -240,29 +419,33 @@ OSCdef.new(
 				msg.postln;
 				Pdef(\pattern1).play(quant:4);
 				Routine.new({
-					~processing.sendMsg("/seq_kick", "play");
-					"y".postln;
+					~processing.sendMsg("/seq1", "play");
 				}).play(quant:4);
 			}{
 				"STOP".postln;
 				Pdef(\pattern1).stop;
-				~processing.sendMsg("/seq_kick", "stop");
-			};
+				Routine.new({
+					~processing.sendMsg("/seq1", "stop");
+				}).play(quant:4);			};
 		}{
 			//do nothing
 		};
 		if(msg[1] == \up)
 		{
-			if(Pdef(\pattern3).isPlaying == false)
+			if(Pdef(\pattern2).isPlaying == false)
 			{
 				"PLAY".postln;
 				msg.postln;
-				Pdef(\pattern3).play(quant:4);
-				~processing.sendMsg("/seq_clap", \play);
+				Pdef(\pattern2).play(quant:4);
+				Routine.new({
+					~processing.sendMsg("/seq2", "play");
+				}).play(quant:4);
 			}{
 				"STOP".postln;
-				Pdef(\pattern3).stop;
-				~processing.sendMsg("/seq_clap", \stop);
+				Pdef(\pattern2).stop;
+				Routine.new({
+					~processing.sendMsg("/seq2", "stop");
+				}).play(quant:4);
 			};
 		}{
 			//do nothing
@@ -280,16 +463,20 @@ OSCdef.new(
 		arg msg;
 		if(msg[1] == \forward)
 		{
-			if(Pdef(\pattern2).isPlaying == false)
+			if(Pdef(\pattern3).isPlaying == false)
 			{
 				"PLAY".postln;
 				msg.postln;
-				Pdef(\pattern2).play(quant:4);
-				~processing.sendMsg("/seq_hatclosed", \play);
+				Pdef(\pattern3).play(quant:4);
+				Routine.new({
+					~processing.sendMsg("/seq3", "play");
+				}).play(quant:4);
 			}{
 				"STOP".postln;
-				Pdef(\pattern2).stop;
-				~processing.sendMsg("/seq_hatclosed", \stop);
+				Pdef(\pattern3).stop;
+				Routine.new({
+					~processing.sendMsg("/seq3", "stop");
+				}).play(quant:4);
 			};
 		}{
 			//do nothing
@@ -301,11 +488,15 @@ OSCdef.new(
 				"PLAY".postln;
 				msg.postln;
 				Pdef(\pattern4).play(quant:4);
-				~processing.sendMsg("/seq_snare", \play);
+				Routine.new({
+					~processing.sendMsg("/seq4", "play");
+				}).play(quant:4);
 			}{
 				"STOP".postln;
 				Pdef(\pattern4).stop;
-				~processing.sendMsg("/seq_snare", \stop);
+				Routine.new({
+					~processing.sendMsg("/seq4", "stop");
+				}).play(quant:4);
 			};
 		}{
 			//do nothing
@@ -405,72 +596,98 @@ OSCdef.new(
 	12000
 );
 
-)
+//OSC function receiving the selected pattern from processing
+OSCdef.new(
+	\processingPattern,
+	{
+		arg msg;
+		msg.postln;
+		case
 
-//CLOCK PATTERN
-t = Pdef(
-	\tempoClock,
-	Pbind(
-		\dur, 1/4,
-		\amp, 0,
-		\x, Pfunc {
-			~processing.sendMsg("/tempo", \tempo);
+		{msg[1] == 1}
+		{
+			Pdefn(\dur1,Pseq(p[msg[2]], inf));
+			if(Pdef(\pattern1).isPlaying == true){
+				Pdef(\pattern1).stop;
+				Pdef(\pattern1).play(quant:4);
+			}
 		}
-	);
+
+		{msg[1] == 2}
+		{
+			Pdefn(\dur2,Pseq(p[msg[2]], inf));
+			if(Pdef(\pattern2).isPlaying == true){
+				Pdef(\pattern2).stop;
+				Pdef(\pattern2).play(quant:4);
+			}
+		}
+
+		{msg[1] == 3}
+		{
+			Pdefn(\dur3,Pseq(p[msg[2]], inf));
+			if(Pdef(\pattern3).isPlaying == true){
+				Pdef(\pattern3).stop;
+				Pdef(\pattern3).play(quant:4);
+			}
+		}
+
+		{msg[1] == 4}
+		{
+			Pdefn(\dur4,Pseq(p[msg[2]], inf));
+			if(Pdef(\pattern4).isPlaying == true){
+				Pdef(\pattern4).stop;
+				Pdef(\pattern4).play(quant:4);
+			}
+		};
+	},
+	'/pattern',
+	nil,
+	12002
 );
 
-t.play(quant:4);
-t.stop;
+//OSC function receiving the selected sample
+OSCdef.new(
+	\processingSample,
+	{
+		arg msg;
+		msg.postln;
+		case
 
+		{msg[1] == 1}
+		{
+			Pdef(\pattern1).set(\instrument, i[msg[2]]);
+		}
+
+		{msg[1] == 2}
+		{
+			Pdef(\pattern2).set(\instrument, i[msg[2]]);
+		}
+
+		{msg[1] == 3}
+		{
+			Pdef(\pattern3).set(\instrument, i[msg[2]]);
+		}
+
+		{msg[1] == 4}
+		{
+			Pdef(\pattern4).set(\instrument, i[msg[2]]);
+		};
+	},
+	'/sample',
+	nil,
+	12002
+);
 
 ~synapseSend.sendMsg("/righthand", \forward);
 ~synapseSend.sendMsg("/righthand", \up);
 ~synapseSend.sendMsg("/lefthand", \forward);
 ~synapseSend.sendMsg("/lefthand", \up);
 
-Pdef(\clappattern).play(quant:4);
 
-Pdef(\pattern1).set(\instrument,\kick);
-Pdef(\pattern2).set(\instrument,\hatclosed);
-
-//PATTERNS
-Pdefn(\dur1,Pseq([1], inf));
-Pdefn(\dur1,Pseq([0.5], inf));
-Pdefn(\dur1,Pseq([0.25], inf));
-Pdefn(\dur1,Pseq([1, 1, 1.25, 0.25, 0.50], inf));
-Pdefn(\dur1,Pseq([1, Rest(0.5), 1.5, 1], inf));
-Pdefn(\dur1,Pseq([1, Rest(1.5), 1.5], inf));//DRUM AND BASS
-Pdefn(\dur1,Pseq([Rest(0.5), 0.5], inf));
-Pdefn(\dur1,Pseq([Rest(0.5), 0.25, 0.25], inf));
-Pdefn(\dur1,Pseq([0.5, 0.5, Rest(0.25), 0.75], inf));
-Pdefn(\dur1,Pseq([0.75, 0.75, 0.75, 1.75], inf));
-Pdefn(\dur1,Pseq([Rest(1), 1], inf));
-Pdefn(\dur1,Pseq([Rest(2), 2], inf));
-Pdefn(\dur1,Pseq([0.5, Rest(1.5), 0.5, 0.5, Rest(1.5), 1, 1.5, Rest(0.5), 0.5], inf));
-Pdefn(\dur1,Pseq([0.25, 0.25, 0.25, 1.25, 0.25, Rest(0.25), 0.25, 0.50, 0.50, 0.25], inf));
-Pdefn(\dur1,Pseq([0.5, 0.5, Rest(0.75), 0.25, 0.5, 0.5, Rest(1)], inf));
-Pdefn(\dur1,Pseq([Rest(0.50), 0.75, 0.25, Rest(0.75), 0.25, 0.5, 1], inf));
-
-
-
-
-
-
-
-
+)
 
 Pdefn(\dur1,Pseq([0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.125, 0.125,
 	0.125, 0.125, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.3333, 0.3333,
 	0.3334], inf));
-Pdefn(\dur1,Pseq([1], inf));
-Pdef(\pattern3).stop;
-Pdefn(\dur3,Pseq([Rest(2), 1, Rest(3), 1, Rest(0.25), 0.75], inf));
-Pdef(\pattern3).play(quant:4);
 
-s.plotTree
-ServerMeter.new(s, 0, 2);
-
-{SinOsc.ar(300+(200*Latch.ar(SinOsc.ar(13.3), Impulse.ar(10))))*0.2}.stop
-
-
-
+t.stop;
