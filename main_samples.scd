@@ -5,7 +5,7 @@ s.boot;
 ~samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
 //~samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
 
-TempoClock.tempo=172/60;
+TempoClock.tempo=130/60;
 d = Dictionary.new;
 
 ~synapseSend = NetAddr.new("127.0.0.1", 12345);    // create the NetAddr
@@ -38,6 +38,45 @@ t = Pdef(
 );
 
 t.play(quant:4);
+
+//PATTERNS
+p = [
+	[1],
+	[0.5],
+	[0.25],
+	[1, 1, 1.25, 0.25, 0.50],
+	[1, Rest(0.5), 1.5, 1],
+	[1, Rest(1.5), 1.5],
+	[Rest(0.5), 0.5],
+	[Rest(0.5), 0.25, 0.25],
+	[0.5, 0.5, Rest(0.25), 0.75],
+	[0.75, 0.75, 0.75, 1.75],
+	[Rest(1), 1],
+	[Rest(2), 2],
+	[0.5, Rest(1.5), 0.5, 0.5, Rest(1)],
+	[0.25, 0.25, 0.25, 1.25, 0.25, Rest(0.25), 0.25, 0.50, 0.50, 0.25],
+	[0.5, 0.5, Rest(0.75), 0.25, 0.5, 0.5, Rest(1)],
+	[Rest(0.50), 0.75, 0.25, Rest(0.75), 0.25, 0.5, 1]
+];
+
+i = [
+	\sample1,
+	\sample2,
+	\sample3,
+	\sample4,
+	\sample5,
+	\sample6,
+	\sample7,
+	\sample8,
+	\sample9,
+	\sample10,
+	\sample11,
+	\sample12,
+	\sample13,
+	\sample14,
+	\sample15,
+	\sample16
+];
 
 
 //Clips synth definitions
@@ -258,8 +297,6 @@ SynthDef(\reverb, { arg outBus = 0, inBus , pan = 0, mix = 0, room = 1;
 
 //Pattern definitions
 
-Pdefn(\dur1,Pseq([2],inf));
-
 Pdef(
 	\pattern1,
 	Pbind(
@@ -278,8 +315,6 @@ Pdef(
 		})
 	);
 );
-
-Pdefn(\dur2,Pseq([Rest(0.5), 0.5], inf));
 
 Pdef(
 	\pattern2,
@@ -300,8 +335,6 @@ Pdef(
 	);
 );
 
-Pdefn(\dur3,Pseq([Rest(1), 1], inf));
-
 Pdef(
 	\pattern3,
 	Pbind(
@@ -321,7 +354,6 @@ Pdef(
 	);
 );
 
-Pdefn(\dur4,Pseq([Rest(2), 1, Rest(1)], inf));
 
 Pdef(
 	\pattern4,
@@ -353,45 +385,13 @@ Pdef(\pattern2).set(\instrument,\sample4);
 Pdef(\pattern3).set(\instrument,\sample16);
 Pdef(\pattern4).set(\instrument,\sample14);
 
+Pdefn(\dur1,Pseq(p[0], inf));
+Pdefn(\dur2,Pseq(p[6], inf));
+Pdefn(\dur3,Pseq(p[10], inf));
+Pdefn(\dur4,Pseq(p[3], inf));
 
-//PATTERNS
-p = [
-	[1],
-	[0.5],
-	[0.25],
-	[1, 1, 1.25, 0.25, 0.50],
-	[1, Rest(0.5), 1.5, 1],
-	[1, Rest(1.5), 1.5],
-	[Rest(0.5), 0.5],
-	[Rest(0.5), 0.25, 0.25],
-	[0.5, 0.5, Rest(0.25), 0.75],
-	[0.75, 0.75, 0.75, 1.75],
-	[Rest(1), 1],
-	[Rest(2), 2],
-	[0.5, Rest(1.5), 0.5, 0.5, Rest(1)],
-	[0.25, 0.25, 0.25, 1.25, 0.25, Rest(0.25), 0.25, 0.50, 0.50, 0.25],
-	[0.5, 0.5, Rest(0.75), 0.25, 0.5, 0.5, Rest(1)],
-	[Rest(0.50), 0.75, 0.25, Rest(0.75), 0.25, 0.5, 1]
-];
 
-i = [
-	\sample1,
-	\sample2,
-	\sample3,
-	\sample4,
-	\sample5,
-	\sample6,
-	\sample7,
-	\sample8,
-	\sample9,
-	\sample10,
-	\sample11,
-	\sample12,
-	\sample13,
-	\sample14,
-	\sample15,
-	\sample16
-];
+
 
 //OSC packets functions
 
