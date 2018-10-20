@@ -2,8 +2,8 @@ s.boot;
 
 (
 
-~samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
-//~samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
+//~samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
+~samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
 
 TempoClock.tempo=130/60;
 d = Dictionary.new;
@@ -374,7 +374,9 @@ Pdef(
 	)
 );
 
+)
 
+(
 //Filters instantiation and instrument default initialization for each pattern
 
 x = Synth.new(\filter, [\inBus, ~b1]);
@@ -507,7 +509,7 @@ OSCdef.new(
 	12345
 );
 
-OSCdef.new(
+/*OSCdef.new(
 	\synapseReceiverAll,
 	{
 		arg time;
@@ -516,7 +518,7 @@ OSCdef.new(
 	'*',
 	nil,
 	12345
-);
+);*/
 
 
 
