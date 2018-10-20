@@ -232,8 +232,23 @@ void setup() {
   cp5 = new ControlP5(this);
   List samples = Arrays.asList("Bell", "Clap", "Cymbal", "Hat Closed", "Hat Open", "High Clave", "High Tom", "Kick",
                                "Low Clave", "Low Tom", "Mid Clave", "Mid Tom", "Pluck", "Rimshot", "Shaker", "Snare");
-  List sequences = Arrays.asList("•___•___•___•___", "•_•_•_•_•_•_•_•_", "••••••••••••••••", "•___•___•____••_",
-                                 "__•___•___•___•_", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P");
+  List sequences = Arrays.asList("•___•___•___•___", 
+                                 "•_•_•_•_•_•_•_•_", 
+                                 "••••••••••••••••", 
+                                 "•___•___•____••_",
+                                 "•_____•____•____", 
+                                 "•_________•_____", 
+                                 "__•___•___•___•_",
+                                 "__••__••__••__••", 
+                                 "•_•__•__•_•__•__", 
+                                 "•__•__•__•______", 
+                                 "____•_______•___", 
+                                 "________•_______", 
+                                 "•_______•_•_____", 
+                                 "••••____•_••_•_•", 
+                                 "•_•____••_•_____", 
+                                 "__•__•___••_•___")
+
 
   /* Sample list for pattern A */
   p1samples = cp5.addScrollableList("sampleA")
