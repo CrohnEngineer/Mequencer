@@ -20,8 +20,9 @@ class StepButton {
   boolean isPlaying;
   int xpos, ypos, wsize, hsize;
   int roundtl, roundtr, roundbr, roundbl;
+  int[] activeColor = new int[3];
 
-  StepButton(int xpos, int ypos, int wsize, int hsize, boolean isActive, boolean isPlaying, int rtl, int rtr, int rbr, int rbl) {
+  StepButton(int xpos, int ypos, int wsize, int hsize, boolean isActive, boolean isPlaying, int rtl, int rtr, int rbr, int rbl, int[] activeColor) {
     this.xpos = xpos;
     this.ypos = ypos;
     this.wsize = wsize;
@@ -32,7 +33,11 @@ class StepButton {
     roundtr = rtr;
     roundbr = rbr;
     roundbl = rbl;
-  }
+    this.activeColor[0] = activeColor[0];
+    this.activeColor[1] = activeColor[1];
+    this.activeColor[2] = activeColor[2];
+
+}
 
   void display() {
     if (isPlaying == false) {
@@ -41,20 +46,15 @@ class StepButton {
         strokeWeight(1);
         stroke(0);
       } else {
-        fill(100);
+        fill(activeColor[0], activeColor[1], activeColor[2]);
         strokeWeight(1);
-        stroke(255);
+        stroke(activeColor[0], activeColor[1], activeColor[2]);
       }
     } else {
       fill(220);
       strokeWeight(1);
-      stroke(191, 61, 49);
+      stroke(activeColor[0], activeColor[1], activeColor[2]);
     }
-    rect(xpos, ypos, wsize, hsize, roundtl, roundtr, roundbr, roundbl);
-  }
-
-  void blink() {
-    fill(255);
     rect(xpos, ypos, wsize, hsize, roundtl, roundtr, roundbr, roundbl);
   }
 }
@@ -79,7 +79,7 @@ class Sequence {
     steps[playingStep].isPlaying = true;
   }
 
-  void displayStep() {
+  void displaySteps() {
     for (int i = 0; i<steps.length; i++) {
       steps[i].display();
     }
@@ -109,6 +109,12 @@ class Sequence {
     }
   }
 }
+
+int[] c1 = {191, 61, 49};
+int[] c2 = {191, 98, 49};
+int[] c3 = {191, 146, 49};
+int[] c4 = {183, 191, 49};
+
 
 //class customScrollableList implements ControllerView<ScrollableList> {
 
@@ -161,10 +167,10 @@ int[] firstStepPos4 = new int[2];
 int rows = 4;
 int columns = 4;
 int numberOfSteps = rows*columns;
-int stepDimension = 22;
+int stepDimension = 27;
 int stepSpacing = 4;
 
-int rectDimension = 100;
+int rectDimension = 120;
 int rectRound = 7;
 
 Sequence sequence1;
@@ -211,30 +217,32 @@ void setup() {
   textFont(dodgeFont);
 
 
-  firstStepPos1[0] = width/5 - 50;
+  firstStepPos1[0] = width/5 - 60;
   firstStepPos1[1] = height/3 + 75;
 
-  firstStepPos2[0] = width*2/5 - 50;
+  firstStepPos2[0] = width*2/5 - 60;
   firstStepPos2[1] = height/3 + 75;
 
-  firstStepPos3[0] = width*3/5 - 50;
+  firstStepPos3[0] = width*3/5 - 60;
   firstStepPos3[1] = height/3 + 75;
 
-  firstStepPos4[0] = width*4/5 - 50;
+  firstStepPos4[0] = width*4/5 - 60;
   firstStepPos4[1] = height/3 + 75;
 
   cp5 = new ControlP5(this);
   List samples = Arrays.asList("Bell", "Clap", "Cymbal", "Hat Closed", "Hat Open", "High Clave", "High Tom", "Kick",
                                "Low Clave", "Low Tom", "Mid Clave", "Mid Tom", "Pluck", "Rimshot", "Shaker", "Snare");
-  List sequences = Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P");
+  List sequences = Arrays.asList("•___•___•___•___", "•_•_•_•_•_•_•_•_", "••••••••••••••••", "•___•___•____••_",
+                                 "__•___•___•___•_", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P");
 
   /* Sample list for pattern A */
   p1samples = cp5.addScrollableList("sampleA")
-    .setPosition(width/5 - 50, height/3 + 200)
+    .setPosition(width/5 - 60, height/3 + 210)
     .setSize(rectDimension, rectDimension)
     .setBarHeight(50)
     .setItemHeight(25)
     .addItems(samples)
+    .setLabel("Sample A")
     //.setView(new customScrollableList())
     // .setType(ScrollableList.LIST) // currently supported DROPDOWN and LIST
     ;
@@ -243,18 +251,19 @@ void setup() {
     .setFont(dodgeFontSmall);
   p1samples.getValueLabel().setFont(dodgeFontSmall);
   //p1samples.getView().setColor(color(191,61,49));
-  p1samples.setColorBackground(color(191, 61, 49));
+  p1samples.setColorBackground(color(c1[0], c1[1], c1[2]));
   //pg = createGraphics(rectDimension,rectDimension);
   //controlP5.ControllerView c1 = p1samples.getView();
   //p1samples.setView(c1);
 
   /* Sequences list for pattern B */
   p1seq = cp5.addScrollableList("seq1")
-    .setPosition(width/5 - 50, height/3 + 325)
+    .setPosition(width/5 - 60, height/3 + 325)
     .setSize(rectDimension, rectDimension)
     .setBarHeight(50)
     .setItemHeight(25)
     .addItems(sequences)
+    .setLabel("Sequence A")
     //.setView(new customScrollableList())
     // .setType(ScrollableList.LIST) // currently supported DROPDOWN and LIST
     ;
@@ -263,18 +272,19 @@ void setup() {
     .setFont(dodgeFontSmall);
   p1seq.getValueLabel().setFont(dodgeFontSmall);
   //p1samples.getView().setColor(color(191,61,49));
-  p1seq.setColorBackground(color(191, 61, 49));
+  p1seq.setColorBackground(color(c1[0], c1[1], c1[2]));
   //pg = createGraphics(rectDimension,rectDimension);
   //controlP5.ControllerView c1 = p1samples.getView();
   //p1samples.setView(c1);
 
   /* Sample list for pattern B */
   p1samples = cp5.addScrollableList("sampleB")
-    .setPosition(width*2/5 - 50, height/3 + 200)
+    .setPosition(width*2/5 - 60, height/3 + 210)
     .setSize(rectDimension, rectDimension)
     .setBarHeight(50)
     .setItemHeight(25)
     .addItems(samples)
+    .setLabel("Sample B")
     //.setView(new customScrollableList())
     // .setType(ScrollableList.LIST) // currently supported DROPDOWN and LIST
     ;
@@ -283,18 +293,19 @@ void setup() {
     .setFont(dodgeFontSmall);
   p1samples.getValueLabel().setFont(dodgeFontSmall);
   //p1samples.getView().setColor(color(191,61,49));
-  p1samples.setColorBackground(color(191, 98, 49));
+  p1samples.setColorBackground(color(c2[0], c2[1], c2[2]));
   //pg = createGraphics(rectDimension,rectDimension);
   //controlP5.ControllerView c1 = p1samples.getView();
   //p1samples.setView(c1);
 
   /* Sequences list for pattern B */
   p1seq = cp5.addScrollableList("seq2")
-    .setPosition(width*2/5 - 50, height/3 + 325)
+    .setPosition(width*2/5 - 60, height/3 + 325)
     .setSize(rectDimension, rectDimension)
     .setBarHeight(50)
     .setItemHeight(25)
     .addItems(sequences)
+    .setLabel("Sequence B")
     //.setView(new customScrollableList())
     // .setType(ScrollableList.LIST) // currently supported DROPDOWN and LIST
     ;
@@ -303,18 +314,19 @@ void setup() {
     .setFont(dodgeFontSmall);
   p1seq.getValueLabel().setFont(dodgeFontSmall);
   //p1samples.getView().setColor(color(191,61,49));
-  p1seq.setColorBackground(color(191, 98, 49));
+  p1seq.setColorBackground(color(c2[0], c2[1], c2[2]));
   //pg = createGraphics(rectDimension,rectDimension);
   //controlP5.ControllerView c1 = p1samples.getView();
   //p1samples.setView(c1);
 
   /* Sample list for pattern C */
   p1samples = cp5.addScrollableList("sampleC")
-    .setPosition(width*3/5 - 50, height/3 + 200)
+    .setPosition(width*3/5 - 60, height/3 + 210)
     .setSize(rectDimension, rectDimension)
     .setBarHeight(50)
     .setItemHeight(25)
     .addItems(samples)
+    .setLabel("Sample C")
     //.setView(new customScrollableList())
     // .setType(ScrollableList.LIST) // currently supported DROPDOWN and LIST
     ;
@@ -323,18 +335,19 @@ void setup() {
     .setFont(dodgeFontSmall);
   p1samples.getValueLabel().setFont(dodgeFontSmall);
   //p1samples.getView().setColor(color(191,61,49));
-  p1samples.setColorBackground(color(191, 146, 49));
+  p1samples.setColorBackground(color(c3[0], c3[1], c3[2]));
   //pg = createGraphics(rectDimension,rectDimension);
   //controlP5.ControllerView c1 = p1samples.getView();
   //p1samples.setView(c1);
 
   /* Sequences list for pattern C */
   p1seq = cp5.addScrollableList("seq3")
-    .setPosition(width*3/5 - 50, height/3 + 325)
+    .setPosition(width*3/5 - 60, height/3 + 325)
     .setSize(rectDimension, rectDimension)
     .setBarHeight(50)
     .setItemHeight(25)
     .addItems(sequences)
+    .setLabel("Sequence C")
     //.setView(new customScrollableList())
     // .setType(ScrollableList.LIST) // currently supported DROPDOWN and LIST
     ;
@@ -343,18 +356,19 @@ void setup() {
     .setFont(dodgeFontSmall);
   p1seq.getValueLabel().setFont(dodgeFontSmall);
   //p1samples.getView().setColor(color(191,61,49));
-  p1seq.setColorBackground(color(191, 146, 49));
+  p1seq.setColorBackground(color(c3[0], c3[1], c3[2]));
   //pg = createGraphics(rectDimension,rectDimension);
   //controlP5.ControllerView c1 = p1samples.getView();
   //p1samples.setView(c1);
 
   /* Sample list for pattern D */
   p1samples = cp5.addScrollableList("sampleD")
-    .setPosition(width*4/5 - 50, height/3 + 200)
+    .setPosition(width*4/5 - 60, height/3 + 210)
     .setSize(rectDimension, rectDimension)
     .setBarHeight(50)
     .setItemHeight(25)
     .addItems(samples)
+    .setLabel("Sample D")
     //.setView(new customScrollableList())
     // .setType(ScrollableList.LIST) // currently supported DROPDOWN and LIST
     ;
@@ -363,18 +377,19 @@ void setup() {
     .setFont(dodgeFontSmall);
   p1samples.getValueLabel().setFont(dodgeFontSmall);
   //p1samples.getView().setColor(color(191,61,49));
-  p1samples.setColorBackground(color(183, 191, 49));
+  p1samples.setColorBackground(color(c4[0], c4[1], c4[2]));
   //pg = createGraphics(rectDimension,rectDimension);
   //controlP5.ControllerView c1 = p1samples.getView();
   //p1samples.setView(c1);
 
   /* Sequences list for pattern D */
   p1seq = cp5.addScrollableList("seq4")
-    .setPosition(width*4/5 - 50, height/3 + 325)
+    .setPosition(width*4/5 - 60, height/3 + 325)
     .setSize(rectDimension, rectDimension)
     .setBarHeight(50)
     .setItemHeight(25)
     .addItems(sequences)
+    .setLabel("Sequence D")
     //.setView(new customScrollableList())
     // .setType(ScrollableList.LIST) // currently supported DROPDOWN and LIST
     ;
@@ -383,7 +398,7 @@ void setup() {
     .setFont(dodgeFontSmall);
   p1seq.getValueLabel().setFont(dodgeFontSmall);
   //p1samples.getView().setColor(color(191,61,49));
-  p1seq.setColorBackground(color(183, 191, 49));
+  p1seq.setColorBackground(color(c4[0], c4[1], c4[2]));
   //pg = createGraphics(rectDimension,rectDimension);
   //controlP5.ControllerView c1 = p1samples.getView();
   //p1samples.setView(c1);
@@ -413,19 +428,25 @@ void setup() {
         roundbr = rectRound;
       sequence1.steps[index] = new StepButton(firstStepPos1[0] + x*(stepDimension + stepSpacing), 
         firstStepPos1[1] + y*(stepDimension + stepSpacing), 
-        stepDimension, stepDimension, false, false, roundtl, roundtr, roundbr, roundbl);
+        stepDimension, stepDimension, false, false, roundtl, roundtr, roundbr, roundbl, c1);
       sequence2.steps[index] = new StepButton(firstStepPos2[0] + x*(stepDimension + stepSpacing), 
         firstStepPos2[1] + y*(stepDimension + stepSpacing), 
-        stepDimension, stepDimension, false, false, roundtl, roundtr, roundbr, roundbl);  
+        stepDimension, stepDimension, false, false, roundtl, roundtr, roundbr, roundbl, c2);  
       sequence3.steps[index] = new StepButton(firstStepPos3[0] + x*(stepDimension + stepSpacing), 
         firstStepPos3[1] + y*(stepDimension + stepSpacing), 
-        stepDimension, stepDimension, false, false, roundtl, roundtr, roundbr, roundbl);  
+        stepDimension, stepDimension, false, false, roundtl, roundtr, roundbr, roundbl, c3);  
       sequence4.steps[index] = new StepButton(firstStepPos4[0] + x*(stepDimension + stepSpacing), 
         firstStepPos4[1] + y*(stepDimension + stepSpacing), 
-        stepDimension, stepDimension, false, false, roundtl, roundtr, roundbr, roundbl);   
+        stepDimension, stepDimension, false, false, roundtl, roundtr, roundbr, roundbl, c4);   
       index++;
     }
   }
+  
+  sequence1.setSteps(patterns[0]);
+  sequence2.setSteps(patterns[6]);
+  sequence3.setSteps(patterns[10]);
+  sequence4.setSteps(patterns[3]);
+
 }
 
 
@@ -442,7 +463,7 @@ void draw() {
 
   fill(0);
   textAlign(CENTER);
-  text("MEQUENCER", width/2, height/5);
+  text("MEQUENCER", width/2, height/6);
 
   if (lpOn == true) {
     float cutoffValMap = map(cutoffValue, 0, 1, 0, 255-62);
@@ -455,7 +476,7 @@ void draw() {
 
     fill(255- (int) cutoffValMap);
     textAlign(CENTER);
-    text("MEQUENCER", width/2, height/5);
+    text("MEQUENCER", width/2, height/6);
   }
 
   float randposX = 4;
@@ -509,7 +530,7 @@ void draw() {
   //KICK
   noStroke();
   rectMode(CENTER);
-  fill(191, 61, 49);
+  fill(c1[0], c1[1], c1[2]);
   rect(width/5 + displacementX*ampSample[0], height/3 - displacementY*ampSample[0], rectDimension, rectDimension, rectRound);
 
   noStroke();
@@ -520,7 +541,7 @@ void draw() {
   //SNARE
   noStroke();
   rectMode(CENTER);
-  fill(191, 98, 49);
+  fill(c2[0], c2[1], c2[2]);
   rect(width*2/5 + displacementX*ampSample[1], height/3 + displacementY*ampSample[1], rectDimension, rectDimension, rectRound);
 
   noStroke();
@@ -531,7 +552,7 @@ void draw() {
   //CLAP
   noStroke();
   rectMode(CENTER);
-  fill(191, 146, 49);
+  fill(c3[0], c3[1], c3[2]);
   rect(width*3/5 + displacementX*ampSample[2], height/3 + displacementY*ampSample[2], rectDimension, rectDimension, rectRound);
 
   noStroke();
@@ -542,7 +563,7 @@ void draw() {
   //HAT CLOSED
   noStroke();
   rectMode(CENTER);
-  fill(183, 191, 49);
+  fill(c4[0], c4[1], c4[2]);
   rect(width*4/5 + displacementX*ampSample[3], height/3 + displacementY*ampSample[3], rectDimension, rectDimension, rectRound);
 
   noStroke();
@@ -551,10 +572,10 @@ void draw() {
   rect(width*4/5 + displacementX*ampSample[3], height/3 + displacementY*ampSample[3], rectDimension, rectDimension, rectRound);
 
   rectMode(CORNER);
-  sequence1.displayStep();
-  sequence2.displayStep();
-  sequence3.displayStep();
-  sequence4.displayStep();
+  sequence1.displaySteps();
+  sequence2.displaySteps();
+  sequence3.displaySteps();
+  sequence4.displaySteps();
 
   alphaSample[0] -= 40;
   alphaSample[1] -= 40;
