@@ -668,7 +668,7 @@ OSCdef.new(
 	{
 		arg msg;
 		//msg.postln;
-		if(~effState ==1){
+		if(~modes[1] == 1){
 			x.set(\cutoff, msg[1].linexp(0,1,100,20000));
 			~processing.sendMsg('/cutoff_value',msg[1]);
 		}{
@@ -687,7 +687,7 @@ OSCdef.new(
 	{
 		arg msg;
 		//msg.postln;
-		if(~effState ==1){
+		if(~modes[1] == 1){
 			y.set(\mix, msg[1], \room, msg[2]);
 			~processing.sendMsg('/reverb_values',msg[1],msg[2]);
 		}{
