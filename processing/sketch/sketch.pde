@@ -9,6 +9,7 @@ controlP5.ScrollableList p1samples, p2samples, p3samples, p4samples, p1seq, p2se
 
 OscP5 oscP5;
 NetAddress supercollider;
+int colStep = 0;
 
 PGraphics pg;
 
@@ -44,7 +45,7 @@ class StepButton {
       if (isActive == false) {
         noFill();
         strokeWeight(1);
-        stroke(0);
+        stroke(colStep);
       } else {
         fill(activeColor[0], activeColor[1], activeColor[2]);
         strokeWeight(1);
@@ -247,7 +248,7 @@ void setup() {
                                  "•_______•_•_____", 
                                  "••••____•_••_•_•", 
                                  "•_•____••_•_____", 
-                                 "__•__•___••_•___")
+                                 "__•__•___••_•___");
 
 
   /* Sample list for pattern A */
@@ -488,8 +489,10 @@ void draw() {
       cutoffValMap = 0;
     }
     background(62 + ((int) cutoffValMap));
+    colStep = 255 - (int) cutoffValMap;
+    
 
-    fill(255- (int) cutoffValMap);
+    fill(255 - (int) cutoffValMap);
     textAlign(CENTER);
     text("MEQUENCER", width/2, height/6);
   }
