@@ -17,7 +17,7 @@ d = Dictionary.new;
 ~b1 = Bus.audio(s, 2);
 
 //0 = sample launch mode, 1 = effect mode
-~modes = [1, 0, 0, 0];
+~modes = [0,0,0,0];
 ~pSample = [7, 3, 15, 13];
 ~pSeq = [0, 6, 10, 3];
 
@@ -442,24 +442,24 @@ OSCdef.new(
 					~pSample[0] = ~pSample[0] + 1;
 					~pSample[0].postln;
 					i[~pSample[0]].postln;
-					~processing.sendMsg("change_sample", 1, ~pSample[0]);
+					~processing.sendMsg("/change_sample", 1, ~pSample[0]);
 				}
 				{
 					~pSample[0] = 0;
 					~pSample[0].postln;
 					i[~pSample[0]].postln;
-					~processing.sendMsg("change_sample", 1, ~pSample[0]);
+					~processing.sendMsg("/change_sample", 1, ~pSample[0]);
 				};
 			}
 			{~modes[3] == 1}
 			{
 				if( ~pSeq[0] < 15) {
 					~pSeq[0] = ~pSeq[0] + 1;
-					~processing.sendMsg("change_sequence", 1, ~pSeq[0]);
+					~processing.sendMsg("/change_sequence", 1, ~pSeq[0]);
 				}
 				{
 					~pSeq[0] = 0;
-					~processing.sendMsg("change_sequence", 1, ~pSeq[0]);
+					~processing.sendMsg("/change_sequence", 1, ~pSeq[0]);
 				}
 			}
 		}{
@@ -493,32 +493,24 @@ OSCdef.new(
 					~pSample[1] = ~pSample[1] + 1;
 					~pSample[1].postln;
 					i[~pSample[1]].postln;
-					Pdef(\pattern2).set(\instrument, i[~pSample[1]]);
+					~processing.sendMsg("/change_sample", 2, ~pSample[1]);
 				}
 				{
 					~pSample[1] = 0;
 					~pSample[1].postln;
 					i[~pSample[1]].postln;
-					Pdef(\pattern2).set(\instrument, i[~pSample[1]]);
+					~processing.sendMsg("/change_sample", 2, ~pSample[1]);
 				};
 			}
 			{~modes[3] == 1}
 			{
 				if( ~pSeq[1] < 15) {
 					~pSeq[1] = ~pSeq[1] + 1;
-					Pdefn(\dur2,Pseq(p[~pSeq[1]], inf));
-					if(Pdef(\pattern2).isPlaying == true){
-						Pdef(\pattern2).stop;
-						Pdef(\pattern2).play(quant:4);
-					}
+					~processing.sendMsg("/change_sequence", 2, ~pSeq[1]);
 				}
 				{
 					~pSeq[1] = 0;
-					Pdefn(\dur2,Pseq(p[~pSeq[1]], inf));
-					if(Pdef(\pattern2).isPlaying == true){
-						Pdef(\pattern2).stop;
-						Pdef(\pattern2).play(quant:4);
-					}
+					~processing.sendMsg("/change_sequence", 2, ~pSeq[1]);
 				}
 			}
 		}{
@@ -563,32 +555,24 @@ OSCdef.new(
 					~pSample[2] = ~pSample[2] + 1;
 					~pSample[2].postln;
 					i[~pSample[2]].postln;
-					Pdef(\pattern3).set(\instrument, i[~pSample[2]]);
+					~processing.sendMsg("/change_sample", 3, ~pSample[2]);
 				}
 				{
 					~pSample[2] = 0;
 					~pSample[2].postln;
 					i[~pSample[2]].postln;
-					Pdef(\pattern3).set(\instrument, i[~pSample[2]]);
+					~processing.sendMsg("/change_sample", 3, ~pSample[2]);
 				};
 			}
 			{~modes[3] == 1}
 			{
 				if( ~pSeq[2] < 15) {
 					~pSeq[2] = ~pSeq[2] + 1;
-					Pdefn(\dur3,Pseq(p[~pSeq[2]], inf));
-					if(Pdef(\pattern3).isPlaying == true){
-						Pdef(\pattern3).stop;
-						Pdef(\pattern3).play(quant:4);
-					}
+					~processing.sendMsg("/change_sequence", 3, ~pSeq[2]);
 				}
 				{
 					~pSeq[2] = 0;
-					Pdefn(\dur3,Pseq(p[~pSeq[2]], inf));
-					if(Pdef(\pattern3).isPlaying == true){
-						Pdef(\pattern3).stop;
-						Pdef(\pattern3).play(quant:4);
-					}
+					~processing.sendMsg("/change_sequence", 3, ~pSeq[2]);
 				}
 			}
 		}{
@@ -622,32 +606,24 @@ OSCdef.new(
 					~pSample[3] = ~pSample[3] + 1;
 					~pSample[3].postln;
 					i[~pSample[3]].postln;
-					Pdef(\pattern4).set(\instrument, i[~pSample[3]]);
+					~processing.sendMsg("/change_sample", 4, ~pSample[3]);
 				}
 				{
 					~pSample[3] = 0;
 					~pSample[3].postln;
 					i[~pSample[3]].postln;
-					Pdef(\pattern4).set(\instrument, i[~pSample[3]]);
+					~processing.sendMsg("/change_sample", 4, ~pSample[3]);
 				};
 			}
 			{~modes[3] == 1}
 			{
 				if( ~pSeq[3] < 15) {
 					~pSeq[3] = ~pSeq[3] + 1;
-					Pdefn(\dur4,Pseq(p[~pSeq[3]], inf));
-					if(Pdef(\pattern4).isPlaying == true){
-						Pdef(\pattern4).stop;
-						Pdef(\pattern4).play(quant:4);
-					}
+					~processing.sendMsg("/change_sequence", 4, ~pSeq[3]);
 				}
 				{
 					~pSeq[3] = 0;
-					Pdefn(\dur4,Pseq(p[~pSeq[3]], inf));
-					if(Pdef(\pattern4).isPlaying == true){
-						Pdef(\pattern4).stop;
-						Pdef(\pattern4).play(quant:4);
-					}
+					~processing.sendMsg("/change_sequence", 4, ~pSeq[3]);
 				}
 			}
 		}{

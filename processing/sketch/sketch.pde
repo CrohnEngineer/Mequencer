@@ -636,6 +636,7 @@ void seq4(int n) {
 
 void sampleA(int n) {
   OscMessage msg = new OscMessage("/sample");
+  println(n);
   msg.add(1);
   msg.add(n);
   oscP5.send(msg, supercollider);
@@ -736,7 +737,8 @@ void oscEvent(OscMessage theOscMessage) {
       default:
         break;
     }
-    case "/change_sequence":
+  break;
+  case "/change_sequence":
       switch((int) theOscMessage.arguments()[0]) {
       case 1:
         seq1((int) theOscMessage.arguments()[1]);
@@ -753,7 +755,8 @@ void oscEvent(OscMessage theOscMessage) {
       default:
         break;
       }
+  break;
   default:
-    break;
+  break;
   }
 }
