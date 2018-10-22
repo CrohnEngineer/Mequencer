@@ -17,7 +17,9 @@ d = Dictionary.new;
 ~b1 = Bus.audio(s, 2);
 
 //0 = sample launch mode, 1 = effect mode
-~state = 1;
+~modes = [1, 0, 0, 0];
+~pSample = [7, 3, 15, 13];
+~pSeq = [0, 6, 10, 3];
 
 d.add(\808 ->
 	PathName(~samplePath).entries.collect({
@@ -415,40 +417,110 @@ OSCdef.new(
 		arg msg;
 		if(msg[1] == \forward)
 		{
-			if(Pdef(\pattern1).isPlaying == false)
+			case
+
+			{~modes[0] == 1}
 			{
-				"PLAY".postln;
-				msg.postln;
-				Pdef(\pattern1).play(quant:4);
-				Routine.new({
-					~processing.sendMsg("/seq1", "play");
-				}).play(quant:4);
-			}{
-				"STOP".postln;
-				Pdef(\pattern1).stop;
-				Routine.new({
-					~processing.sendMsg("/seq1", "stop");
+				if(Pdef(\pattern1).isPlaying == false)
+				{
+					"PLAY".postln;
+					msg.postln;
+					Pdef(\pattern1).play(quant:4);
+					Routine.new({
+						~processing.sendMsg("/seq1", "play");
+					}).play(quant:4);
+				}{
+					"STOP".postln;
+					Pdef(\pattern1).stop;
+					Routine.new({
+						~processing.sendMsg("/seq1", "stop");
 				}).play(quant:4);			};
+			}
+			{~modes[2] == 1}
+			{
+				if( ~pSample[0] < 15) {
+					~pSample[0] = ~pSample[0] + 1;
+					~pSample[0].postln;
+					i[~pSample[0]].postln;
+					~processing.sendMsg("change_sample", 1, ~pSample[0]);
+				}
+				{
+					~pSample[0] = 0;
+					~pSample[0].postln;
+					i[~pSample[0]].postln;
+					~processing.sendMsg("change_sample", 1, ~pSample[0]);
+				};
+			}
+			{~modes[3] == 1}
+			{
+				if( ~pSeq[0] < 15) {
+					~pSeq[0] = ~pSeq[0] + 1;
+					~processing.sendMsg("change_sequence", 1, ~pSeq[0]);
+				}
+				{
+					~pSeq[0] = 0;
+					~processing.sendMsg("change_sequence", 1, ~pSeq[0]);
+				}
+			}
 		}{
 			//do nothing
 		};
 		if(msg[1] == \up)
 		{
-			if(Pdef(\pattern2).isPlaying == false)
+			case
+
+			{~modes[0] == 1}
 			{
-				"PLAY".postln;
-				msg.postln;
-				Pdef(\pattern2).play(quant:4);
-				Routine.new({
-					~processing.sendMsg("/seq2", "play");
-				}).play(quant:4);
-			}{
-				"STOP".postln;
-				Pdef(\pattern2).stop;
-				Routine.new({
-					~processing.sendMsg("/seq2", "stop");
-				}).play(quant:4);
-			};
+				if(Pdef(\pattern2).isPlaying == false)
+				{
+					"PLAY".postln;
+					msg.postln;
+					Pdef(\pattern2).play(quant:4);
+					Routine.new({
+						~processing.sendMsg("/seq2", "play");
+					}).play(quant:4);
+				}{
+					"STOP".postln;
+					Pdef(\pattern2).stop;
+					Routine.new({
+						~processing.sendMsg("/seq2", "stop");
+					}).play(quant:4);
+				};
+			}
+			{~modes[2] == 1}
+			{
+				if( ~pSample[1] < 15) {
+					~pSample[1] = ~pSample[1] + 1;
+					~pSample[1].postln;
+					i[~pSample[1]].postln;
+					Pdef(\pattern2).set(\instrument, i[~pSample[1]]);
+				}
+				{
+					~pSample[1] = 0;
+					~pSample[1].postln;
+					i[~pSample[1]].postln;
+					Pdef(\pattern2).set(\instrument, i[~pSample[1]]);
+				};
+			}
+			{~modes[3] == 1}
+			{
+				if( ~pSeq[1] < 15) {
+					~pSeq[1] = ~pSeq[1] + 1;
+					Pdefn(\dur2,Pseq(p[~pSeq[1]], inf));
+					if(Pdef(\pattern2).isPlaying == true){
+						Pdef(\pattern2).stop;
+						Pdef(\pattern2).play(quant:4);
+					}
+				}
+				{
+					~pSeq[1] = 0;
+					Pdefn(\dur2,Pseq(p[~pSeq[1]], inf));
+					if(Pdef(\pattern2).isPlaying == true){
+						Pdef(\pattern2).stop;
+						Pdef(\pattern2).play(quant:4);
+					}
+				}
+			}
 		}{
 			//do nothing
 		};
@@ -465,41 +537,119 @@ OSCdef.new(
 		arg msg;
 		if(msg[1] == \forward)
 		{
-			if(Pdef(\pattern3).isPlaying == false)
+			case
+
+			{~modes[0] == 1}
 			{
-				"PLAY".postln;
-				msg.postln;
-				Pdef(\pattern3).play(quant:4);
-				Routine.new({
-					~processing.sendMsg("/seq3", "play");
-				}).play(quant:4);
-			}{
-				"STOP".postln;
-				Pdef(\pattern3).stop;
-				Routine.new({
-					~processing.sendMsg("/seq3", "stop");
-				}).play(quant:4);
-			};
+				if(Pdef(\pattern3).isPlaying == false)
+				{
+					"PLAY".postln;
+					msg.postln;
+					Pdef(\pattern3).play(quant:4);
+					Routine.new({
+						~processing.sendMsg("/seq3", "play");
+					}).play(quant:4);
+				}{
+					"STOP".postln;
+					Pdef(\pattern3).stop;
+					Routine.new({
+						~processing.sendMsg("/seq3", "stop");
+					}).play(quant:4);
+				};
+			}
+			{~modes[2] == 1}
+			{
+				if( ~pSample[2] < 15) {
+					~pSample[2] = ~pSample[2] + 1;
+					~pSample[2].postln;
+					i[~pSample[2]].postln;
+					Pdef(\pattern3).set(\instrument, i[~pSample[2]]);
+				}
+				{
+					~pSample[2] = 0;
+					~pSample[2].postln;
+					i[~pSample[2]].postln;
+					Pdef(\pattern3).set(\instrument, i[~pSample[2]]);
+				};
+			}
+			{~modes[3] == 1}
+			{
+				if( ~pSeq[2] < 15) {
+					~pSeq[2] = ~pSeq[2] + 1;
+					Pdefn(\dur3,Pseq(p[~pSeq[2]], inf));
+					if(Pdef(\pattern3).isPlaying == true){
+						Pdef(\pattern3).stop;
+						Pdef(\pattern3).play(quant:4);
+					}
+				}
+				{
+					~pSeq[2] = 0;
+					Pdefn(\dur3,Pseq(p[~pSeq[2]], inf));
+					if(Pdef(\pattern3).isPlaying == true){
+						Pdef(\pattern3).stop;
+						Pdef(\pattern3).play(quant:4);
+					}
+				}
+			}
 		}{
 			//do nothing
 		};
 		if(msg[1] == \up)
 		{
-			if(Pdef(\pattern4).isPlaying == false)
+			case
+
+			{~modes[0] == 1}
 			{
-				"PLAY".postln;
-				msg.postln;
-				Pdef(\pattern4).play(quant:4);
-				Routine.new({
-					~processing.sendMsg("/seq4", "play");
-				}).play(quant:4);
-			}{
-				"STOP".postln;
-				Pdef(\pattern4).stop;
-				Routine.new({
-					~processing.sendMsg("/seq4", "stop");
-				}).play(quant:4);
-			};
+				if(Pdef(\pattern4).isPlaying == false)
+				{
+					"PLAY".postln;
+					msg.postln;
+					Pdef(\pattern4).play(quant:4);
+					Routine.new({
+						~processing.sendMsg("/seq4", "play");
+					}).play(quant:4);
+				}{
+					"STOP".postln;
+					Pdef(\pattern4).stop;
+					Routine.new({
+						~processing.sendMsg("/seq4", "stop");
+					}).play(quant:4);
+				};
+			}
+			{~modes[2] == 1}
+			{
+				if( ~pSample[3] < 15) {
+					~pSample[3] = ~pSample[3] + 1;
+					~pSample[3].postln;
+					i[~pSample[3]].postln;
+					Pdef(\pattern4).set(\instrument, i[~pSample[3]]);
+				}
+				{
+					~pSample[3] = 0;
+					~pSample[3].postln;
+					i[~pSample[3]].postln;
+					Pdef(\pattern4).set(\instrument, i[~pSample[3]]);
+				};
+			}
+			{~modes[3] == 1}
+			{
+				if( ~pSeq[3] < 15) {
+					~pSeq[3] = ~pSeq[3] + 1;
+					Pdefn(\dur4,Pseq(p[~pSeq[3]], inf));
+					if(Pdef(\pattern4).isPlaying == true){
+						Pdef(\pattern4).stop;
+						Pdef(\pattern4).play(quant:4);
+					}
+				}
+				{
+					~pSeq[3] = 0;
+					Pdefn(\dur4,Pseq(p[~pSeq[3]], inf));
+					if(Pdef(\pattern4).isPlaying == true){
+						Pdef(\pattern4).stop;
+						Pdef(\pattern4).play(quant:4);
+					}
+				}
+			}
 		}{
 			//do nothing
 		};
@@ -508,18 +658,6 @@ OSCdef.new(
 	nil,
 	12345
 );
-
-/*OSCdef.new(
-	\synapseReceiverAll,
-	{
-		arg time;
-		time.postln;
-	},
-	'*',
-	nil,
-	12345
-);*/
-
 
 
 //OSCdef for forwarding the righthand position to Wekinator
@@ -554,7 +692,7 @@ OSCdef.new(
 	{
 		arg msg;
 		//msg.postln;
-		if(~state ==1){
+		if(~effState ==1){
 			x.set(\cutoff, msg[1].linexp(0,1,100,20000));
 			~processing.sendMsg('/cutoff_value',msg[1]);
 		}{
@@ -573,7 +711,7 @@ OSCdef.new(
 	{
 		arg msg;
 		//msg.postln;
-		if(~state ==1){
+		if(~effState ==1){
 			y.set(\mix, msg[1], \room, msg[2]);
 			~processing.sendMsg('/reverb_values',msg[1],msg[2]);
 		}{
@@ -585,15 +723,66 @@ OSCdef.new(
 	12000
 );
 
+//OSC function for entering/exiting the launch mode through the touchOSC app
+OSCdef.new(
+	\enterLaunchState,
+	{
+		arg msg;
+		msg.postln;
+		msg[1].postln;
+
+		~modes[0] = msg[1].asInteger;
+		~modes.postln;
+	},
+	'/mode/1/1',
+	nil,
+	12000
+);
+
 //OSC function for entering/exiting the effect mode through the touchOSC app
 OSCdef.new(
 	\enterEffectState,
 	{
 		arg msg;
-		//msg.postln;
-		~state = msg[1];
+		msg.postln;
+		msg[1].postln;
+
+		~modes[1] = msg[1].asInteger;
+		~modes.postln;
 	},
-	'/effect_mode',
+	'/mode/1/2',
+	nil,
+	12000
+);
+
+//OSC function for entering/exiting the sample selecetion mode through the touchOSC app
+OSCdef.new(
+	\enterSampleSelectionState,
+	{
+		arg msg;
+		msg.postln;
+		msg[1].postln;
+
+		~modes[2] = msg[1].asInteger;
+		~modes.postln;
+	},
+	'/mode/1/3',
+	nil,
+	12000
+);
+
+//OSC function for entering/exiting the sequence selection mode through the touchOSC app
+OSCdef.new(
+	\enterSequenceSelectionState,
+	{
+		arg msg;
+		msg.postln;
+		msg[1].postln;
+
+		~modes[3] = msg[1].asInteger;
+		~modes.postln;
+	},
+	'/mode/1/4',
 	nil,
 	12000
 );
@@ -680,13 +869,22 @@ OSCdef.new(
 	12002
 );
 
+// ~cSampState = 0;
 ~synapseSend.sendMsg("/righthand", \forward);
 ~synapseSend.sendMsg("/righthand", \up);
 ~synapseSend.sendMsg("/lefthand", \forward);
 ~synapseSend.sendMsg("/lefthand", \up);
 
+~local = NetAddr("127.0.0.1",12000);
+~local.sendMsg("/mode/1/4", 1);
+~local.sendMsg("/mode/1/3", 0);
+
+
 
 )
+
+
+Pdef(\pattern1)
 
 Pdefn(\dur1,Pseq([0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.125, 0.125,
 	0.125, 0.125, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.3333, 0.3333,

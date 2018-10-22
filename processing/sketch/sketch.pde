@@ -247,7 +247,7 @@ void setup() {
                                  "•_______•_•_____", 
                                  "••••____•_••_•_•", 
                                  "•_•____••_•_____", 
-                                 "__•__•___••_•___")
+                                 "__•__•___••_•___");
 
 
   /* Sample list for pattern A */
@@ -469,12 +469,6 @@ void setup() {
 void draw() {
 
   background(255);
-  //pg.beginDraw();
-  //pg.rect(width/5 -50, height/2 - 200, rectDimension, rectDimension, rectRound);
-  //pg.endDraw();
-  //controlP5.ControllerView c1 = p1samples.getView();
-  //c1.display(pg,p1samples);
-  //p1samples.setView(c1);
 
   fill(0);
   textAlign(CENTER);
@@ -722,6 +716,40 @@ void oscEvent(OscMessage theOscMessage) {
     lpOn = true;
     cutoffValue = (float) theOscMessage.arguments()[0];
     break;
+  case "/change_sample":
+    switch((int) theOscMessage.arguments()[0]) {
+      case 1:
+        sampleA((int) theOscMessage.arguments()[1]);
+        break;
+      case 2:
+        sampleB((int) theOscMessage.arguments()[1]);
+        break;
+      case 3:
+        sampleC((int) theOscMessage.arguments()[1]);
+        break;
+      case 4:
+        sampleD((int) theOscMessage.arguments()[1]);
+        break;
+      default:
+        break;
+    }
+    case "/change_sequence":
+      switch((int) theOscMessage.arguments()[0]) {
+      case 1:
+        seq1((int) theOscMessage.arguments()[1]);
+        break;
+      case 2:
+        seq2((int) theOscMessage.arguments()[1]);
+        break;
+      case 3:
+        seq3((int) theOscMessage.arguments()[1]);
+        break;
+      case 4:
+        seq4((int) theOscMessage.arguments()[1]);
+        break;
+      default:
+        break;
+      }
   default:
     break;
   }
