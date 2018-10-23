@@ -608,6 +608,7 @@ void seq1(int n) {
   msg.add(1);
   msg.add(n);
   oscP5.send(msg, supercollider);
+  //cp5.getController((String) p1seq.getItem(n).get("name")).setMousePressed(true);
 }
 
 void seq2(int n) {
@@ -640,6 +641,7 @@ void sampleA(int n) {
   msg.add(1);
   msg.add(n);
   oscP5.send(msg, supercollider);
+  //cp5.getController((String) p1samples.getItem(n).get("name")).setMousePressed(true);
 }
 
 void sampleB(int n) {

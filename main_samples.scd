@@ -2,8 +2,8 @@ s.boot;
 
 (
 
-//~samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
-~samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
+~samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
+//~samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
 
 TempoClock.tempo=130/60;
 d = Dictionary.new;
@@ -460,7 +460,7 @@ OSCdef.new(
 				{
 					~pSeq[0] = 0;
 					~processing.sendMsg("/change_sequence", 1, ~pSeq[0]);
-				}
+				};
 			}
 		}{
 			//do nothing
@@ -511,7 +511,7 @@ OSCdef.new(
 				{
 					~pSeq[1] = 0;
 					~processing.sendMsg("/change_sequence", 2, ~pSeq[1]);
-				}
+				};
 			}
 		}{
 			//do nothing
@@ -573,7 +573,7 @@ OSCdef.new(
 				{
 					~pSeq[2] = 0;
 					~processing.sendMsg("/change_sequence", 3, ~pSeq[2]);
-				}
+				};
 			}
 		}{
 			//do nothing
@@ -624,7 +624,7 @@ OSCdef.new(
 				{
 					~pSeq[3] = 0;
 					~processing.sendMsg("/change_sequence", 4, ~pSeq[3]);
-				}
+				};
 			}
 		}{
 			//do nothing
@@ -777,7 +777,8 @@ OSCdef.new(
 			if(Pdef(\pattern1).isPlaying == true){
 				Pdef(\pattern1).stop;
 				Pdef(\pattern1).play(quant:4);
-			}
+			}{};
+			~pSeq[0] = msg[2].asInteger;
 		}
 
 		{msg[1] == 2}
@@ -786,7 +787,8 @@ OSCdef.new(
 			if(Pdef(\pattern2).isPlaying == true){
 				Pdef(\pattern2).stop;
 				Pdef(\pattern2).play(quant:4);
-			}
+			}{};
+			~pSeq[1] = msg[2].asInteger;
 		}
 
 		{msg[1] == 3}
@@ -795,7 +797,8 @@ OSCdef.new(
 			if(Pdef(\pattern3).isPlaying == true){
 				Pdef(\pattern3).stop;
 				Pdef(\pattern3).play(quant:4);
-			}
+			}{};
+			~pSeq[2] = msg[2].asInteger;
 		}
 
 		{msg[1] == 4}
@@ -804,7 +807,8 @@ OSCdef.new(
 			if(Pdef(\pattern4).isPlaying == true){
 				Pdef(\pattern4).stop;
 				Pdef(\pattern4).play(quant:4);
-			}
+			}{};
+			~pSeq[3] = msg[2].asInteger;
 		};
 	},
 	'/pattern',
@@ -823,21 +827,25 @@ OSCdef.new(
 		{msg[1] == 1}
 		{
 			Pdef(\pattern1).set(\instrument, i[msg[2]]);
+			~pSample[0] = msg[2].asInteger;
 		}
 
 		{msg[1] == 2}
 		{
 			Pdef(\pattern2).set(\instrument, i[msg[2]]);
+			~pSample[1] = msg[2].asInteger;
 		}
 
 		{msg[1] == 3}
 		{
 			Pdef(\pattern3).set(\instrument, i[msg[2]]);
+			~pSample[2] = msg[2].asInteger;
 		}
 
 		{msg[1] == 4}
 		{
 			Pdef(\pattern4).set(\instrument, i[msg[2]]);
+			~pSample[3] = msg[2].asInteger;
 		};
 	},
 	'/sample',
@@ -846,14 +854,15 @@ OSCdef.new(
 );
 
 // ~cSampState = 0;
+//~modes[0]=1;
 ~synapseSend.sendMsg("/righthand", \forward);
 ~synapseSend.sendMsg("/righthand", \up);
 ~synapseSend.sendMsg("/lefthand", \forward);
 ~synapseSend.sendMsg("/lefthand", \up);
 
-~local = NetAddr("127.0.0.1",12000);
+/*~local = NetAddr("127.0.0.1",12000);
 ~local.sendMsg("/mode/1/4", 1);
-~local.sendMsg("/mode/1/3", 0);
+~local.sendMsg("/mode/1/3", 0);*/
 
 
 
