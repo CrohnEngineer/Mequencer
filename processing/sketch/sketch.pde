@@ -609,6 +609,7 @@ void seq1(int n) {
   msg.add(n);
   oscP5.send(msg, supercollider);
   //cp5.getController((String) p1seq.getItem(n).get("name")).setMousePressed(true);
+  cp5.getController("seq1").setCaptionLabel((String) p1seq.getItem(n).get("name"));
 }
 
 void seq2(int n) {
@@ -617,6 +618,7 @@ void seq2(int n) {
   msg.add(2);
   msg.add(n);
   oscP5.send(msg, supercollider);
+  cp5.getController("seq1").setCaptionLabel((String) p1seq.getItem(n).get("name"));
 }
 
 void seq3(int n) {
@@ -625,6 +627,7 @@ void seq3(int n) {
   msg.add(3);
   msg.add(n);
   oscP5.send(msg, supercollider);
+  cp5.getController("seq1").setCaptionLabel((String) p1seq.getItem(n).get("name"));
 }
 
 void seq4(int n) {
@@ -633,6 +636,7 @@ void seq4(int n) {
   msg.add(4);
   msg.add(n);
   oscP5.send(msg, supercollider);
+  cp5.getController("seq1").setCaptionLabel((String) p1seq.getItem(n).get("name"));
 }
 
 void sampleA(int n) {
@@ -642,6 +646,7 @@ void sampleA(int n) {
   msg.add(n);
   oscP5.send(msg, supercollider);
   //cp5.getController((String) p1samples.getItem(n).get("name")).setMousePressed(true);
+  cp5.getController("sampleA").setCaptionLabel((String) p1samples.getItem(n).get("name"));
 }
 
 void sampleB(int n) {
@@ -649,6 +654,7 @@ void sampleB(int n) {
   msg.add(2);
   msg.add(n);
   oscP5.send(msg, supercollider);
+  cp5.getController("sampleB").setCaptionLabel((String) p1samples.getItem(n).get("name"));
 }
 
 void sampleC(int n) {
@@ -656,6 +662,7 @@ void sampleC(int n) {
   msg.add(3);
   msg.add(n);
   oscP5.send(msg, supercollider);
+  cp5.getController("sampleC").setCaptionLabel((String) p1samples.getItem(n).get("name"));
 }
 
 void sampleD(int n) {
@@ -663,6 +670,7 @@ void sampleD(int n) {
   msg.add(4);
   msg.add(n);
   oscP5.send(msg, supercollider);
+  cp5.getController("sampleD").setCaptionLabel((String) p1samples.getItem(n).get("name"));
 }
 
 void oscEvent(OscMessage theOscMessage) {
