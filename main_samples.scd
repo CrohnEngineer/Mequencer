@@ -16,8 +16,7 @@ d = Dictionary.new;
 
 ~b1 = Bus.audio(s, 2);
 
-//0 = sample launch mode, 1 = effect mode
-~modes = [0,0,0,0];
+~modes = [0,0,1,0];
 ~pSample = [7, 3, 15, 13];
 ~pSeq = [0, 6, 10, 3];
 
@@ -28,18 +27,14 @@ d.add(\808 ->
 }););
 
 //CLOCK PATTERN
-t = Pdef(
-	\tempoClock,
-	Pbind(
-		\dur, 1/4,
-		\amp, 0,
-		\x, Pfunc {
-			~processing.sendMsg("/tempo", \tempo);
-		}
-	);
-);
-
-t.play(quant:4);
+t = Task({
+	loop {
+		"allora".postln();
+		"diocane".postln();
+		NetAddr("127.0.0.1", 12001).sendMsg("/tempo", \tempo);
+		0.25.wait;
+	}
+}).play(quant:4);
 
 //PATTERNS
 p = [

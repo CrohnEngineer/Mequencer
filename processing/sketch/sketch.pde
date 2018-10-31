@@ -184,7 +184,7 @@ int[][] patterns = {
   {1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0}, 
   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, 
   {1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0}, 
-  {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0}, 
+  {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0}, 
   {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0}, 
   {0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0}, 
   {0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1}, 
@@ -209,6 +209,9 @@ float[] ampSample = {0, 0, 0, 0};
 float[] reverbValues = new float[2];
 float cutoffValue = 0;
 
+List<String> samples;
+List<String> sequences;
+
 
 void setup() {
   size(1080, 720);
@@ -231,13 +234,13 @@ void setup() {
   firstStepPos4[1] = height/3 + 75;
 
   cp5 = new ControlP5(this);
-  List samples = Arrays.asList("Bell", "Clap", "Cymbal", "Hat Closed", "Hat Open", "High Clave", "High Tom", "Kick",
+  samples = Arrays.asList("Bell", "Clap", "Cymbal", "Hat Closed", "Hat Open", "High Clave", "High Tom", "Kick",
                                "Low Clave", "Low Tom", "Mid Clave", "Mid Tom", "Pluck", "Rimshot", "Shaker", "Snare");
-  List sequences = Arrays.asList("•___•___•___•___", 
+  sequences = Arrays.asList("•___•___•___•___", 
                                  "•_•_•_•_•_•_•_•_", 
                                  "••••••••••••••••", 
                                  "•___•___•____••_",
-                                 "•_____•____•____", 
+                                 "•_____•_____•___", 
                                  "•_________•_____", 
                                  "__•___•___•___•_",
                                  "__••__••__••__••", 
@@ -726,15 +729,19 @@ void oscEvent(OscMessage theOscMessage) {
     switch((int) theOscMessage.arguments()[0]) {
       case 1:
         sampleA((int) theOscMessage.arguments()[1]);
+        cp5.getController("sampleA").setLabel(samples.get((int) theOscMessage.arguments()[1]));
         break;
       case 2:
         sampleB((int) theOscMessage.arguments()[1]);
+        cp5.getController("sampleB").setLabel(samples.get((int) theOscMessage.arguments()[1]));
         break;
       case 3:
         sampleC((int) theOscMessage.arguments()[1]);
+        cp5.getController("sampleC").setLabel(samples.get((int) theOscMessage.arguments()[1]));
         break;
       case 4:
         sampleD((int) theOscMessage.arguments()[1]);
+        cp5.getController("sampleD").setLabel(samples.get((int) theOscMessage.arguments()[1]));
         break;
       default:
         break;
@@ -744,15 +751,19 @@ void oscEvent(OscMessage theOscMessage) {
       switch((int) theOscMessage.arguments()[0]) {
       case 1:
         seq1((int) theOscMessage.arguments()[1]);
+        cp5.getController("seq1").setLabel(sequences.get((int) theOscMessage.arguments()[1]));
         break;
       case 2:
         seq2((int) theOscMessage.arguments()[1]);
+        cp5.getController("seq2").setLabel(sequences.get((int) theOscMessage.arguments()[1]));
         break;
       case 3:
         seq3((int) theOscMessage.arguments()[1]);
+        cp5.getController("seq3").setLabel(sequences.get((int) theOscMessage.arguments()[1]));
         break;
       case 4:
         seq4((int) theOscMessage.arguments()[1]);
+        cp5.getController("seq4").setLabel(sequences.get((int) theOscMessage.arguments()[1]));
         break;
       default:
         break;
