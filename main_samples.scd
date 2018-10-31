@@ -2,10 +2,10 @@ s.boot;
 
 (
 
-~samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/808/"; //MAC
+~samplePath = thisProcess.nowExecutingPath.dirname +/+ "sounds/drumset/"; //MAC
 //~samplePath = Platform.resourceDir +/+ "sounds/808/"; //Windows
 
-TempoClock.tempo=130/60;
+TempoClock.tempo=90/60;
 d = Dictionary.new;
 
 ~synapseSend = NetAddr.new("127.0.0.1", 12345);    // create the NetAddr
@@ -16,7 +16,7 @@ d = Dictionary.new;
 
 ~b1 = Bus.audio(s, 2);
 
-~modes = [0,0,1,0];
+~modes = [1,0,0,0];
 ~pSample = [7, 3, 15, 13];
 ~pSeq = [0, 6, 10, 3];
 
@@ -27,17 +27,15 @@ d.add(\808 ->
 }););
 
 //CLOCK PATTERN
-t = Task({
+r = Routine({
 	loop {
-		"allora".postln();
-		"diocane".postln();
 		NetAddr("127.0.0.1", 12001).sendMsg("/tempo", \tempo);
-		0.25.wait;
+		0.25.yield;
 	}
 }).play(quant:4);
 
 //PATTERNS
-p = [
+/*p = [
 	[1],
 	[0.5],
 	[0.25],
@@ -53,6 +51,25 @@ p = [
 	[0.5, Rest(1.5), 0.5, 0.5, Rest(1)],
 	[0.25, 0.25, 0.25, 1.25, 0.25, Rest(0.25), 0.25, 0.50, 0.50, 0.25],
 	[0.5, 0.5, Rest(0.75), 0.25, 0.5, 0.5, Rest(1)],
+	[Rest(0.50), 0.75, 0.25, Rest(0.75), 0.25, 0.5, 1]
+];*/
+
+p = [
+	[1],
+	[0.5],
+	[0.25],
+	[1, 1, 1.25, 0.25, 0.50],
+	[1, Rest(0.5), 1.5, 1],
+	[1, Rest(1.5), 1.5],
+	[Rest(0.5), 0.5], //hatclosed
+	[Rest(0.5), 0.25, 0.25],
+	[0.5, 0.5, Rest(0.25), 0.75],
+	[0.75, 0.75, 0.75, 1.75],
+	[Rest(1), 1], //clap/snare
+	[Rest(2), 2],
+	[0.5, Rest(1.5), 0.5, 0.5, Rest(1)],
+	[0.75, 1.25, 0.75, 1.25], //kick
+	[Rest(1.75), 0.5, 0.5, Rest(1.25)], //rimshot
 	[Rest(0.50), 0.75, 0.25, Rest(0.75), 0.25, 0.5, 1]
 ];
 
@@ -83,7 +100,7 @@ i = [
 SynthDef.new(\sample1, {
 	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
-	sig = PlayBuf.ar(1,0, BufRateScale.ir(0)*rate, doneAction: 2);
+	sig = PlayBuf.ar(2,0, BufRateScale.ir(0)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
 	sig = sig * env;
 	sig = sig * amp;
@@ -96,7 +113,7 @@ SynthDef.new(\sample1, {
 SynthDef.new(\sample2, {
 	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig;
-	sig = PlayBuf.ar(1,1, BufRateScale.ir(1)*rate, doneAction: 2);
+	sig = PlayBuf.ar(2,1, BufRateScale.ir(1)*rate, doneAction: 2);
 	sig = sig * amp;
 	Out.ar(outBus, Pan2.ar(sig, 0, 1));
 }).add;
@@ -107,7 +124,7 @@ SynthDef.new(\sample2, {
 SynthDef.new(\sample3, {
 	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
-	sig = PlayBuf.ar(1,2, BufRateScale.ir(2)*rate, doneAction: 2);
+	sig = PlayBuf.ar(2,2, BufRateScale.ir(2)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
 	sig = sig * env;
 	sig = sig * amp;
@@ -119,7 +136,7 @@ SynthDef.new(\sample3, {
 SynthDef.new(\sample4, {
 	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
-	sig = PlayBuf.ar(1,3, BufRateScale.ir(3)*rate, doneAction: 2);
+	sig = PlayBuf.ar(2,3, BufRateScale.ir(3)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
 	sig = sig * env;
 	sig = sig * amp;
@@ -131,7 +148,7 @@ SynthDef.new(\sample4, {
 SynthDef.new(\sample5, {
 	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
-	sig = PlayBuf.ar(1,4, BufRateScale.ir(4)*rate, doneAction: 2);
+	sig = PlayBuf.ar(2,4, BufRateScale.ir(4)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
 	sig = sig * env;
 	sig = sig * amp;
@@ -143,7 +160,7 @@ SynthDef.new(\sample5, {
 SynthDef.new(\sample6, {
 	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
-	sig = PlayBuf.ar(1,5, BufRateScale.ir(5)*rate, doneAction: 2);
+	sig = PlayBuf.ar(2,5, BufRateScale.ir(5)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
 	sig = sig * env;
 	sig = sig * amp;
@@ -155,7 +172,7 @@ SynthDef.new(\sample6, {
 SynthDef.new(\sample7, {
 	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
-	sig = PlayBuf.ar(1,6, BufRateScale.ir(6)*rate, doneAction: 2);
+	sig = PlayBuf.ar(2,6, BufRateScale.ir(6)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
 	sig = sig * env;
 	sig = sig * amp;
@@ -167,7 +184,7 @@ SynthDef.new(\sample7, {
 SynthDef.new(\sample8, {
 	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
-	sig = PlayBuf.ar(1,7, BufRateScale.ir(7)*rate, doneAction: 2);
+	sig = PlayBuf.ar(2,7, BufRateScale.ir(7)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
 	sig = sig * env;
 	sig = sig * amp;
@@ -179,7 +196,7 @@ SynthDef.new(\sample8, {
 SynthDef.new(\sample9, {
 	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
-	sig = PlayBuf.ar(1,8, BufRateScale.ir(8)*rate, doneAction: 2);
+	sig = PlayBuf.ar(2,8, BufRateScale.ir(8)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
 	sig = sig * env;
 	sig = sig * amp;
@@ -191,7 +208,7 @@ SynthDef.new(\sample9, {
 SynthDef.new(\sample10, {
 	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
-	sig = PlayBuf.ar(1,9, BufRateScale.ir(9)*rate, doneAction: 2);
+	sig = PlayBuf.ar(2,9, BufRateScale.ir(9)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
 	sig = sig * env;
 	sig = sig * amp;
@@ -203,7 +220,7 @@ SynthDef.new(\sample10, {
 SynthDef.new(\sample11, {
 	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
-	sig = PlayBuf.ar(1,10, BufRateScale.ir(10)*rate, doneAction: 2);
+	sig = PlayBuf.ar(2,10, BufRateScale.ir(10)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
 	sig = sig * env;
 	sig = sig * amp;
@@ -215,7 +232,7 @@ SynthDef.new(\sample11, {
 SynthDef.new(\sample12, {
 	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
-	sig = PlayBuf.ar(1,11, BufRateScale.ir(11)*rate, doneAction: 2);
+	sig = PlayBuf.ar(2,11, BufRateScale.ir(11)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
 	sig = sig * env;
 	sig = sig * amp;
@@ -227,7 +244,7 @@ SynthDef.new(\sample12, {
 SynthDef.new(\sample13, {
 	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
-	sig = PlayBuf.ar(1,12, BufRateScale.ir(12)*rate, doneAction: 2);
+	sig = PlayBuf.ar(2,12, BufRateScale.ir(12)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
 	sig = sig * env;
 	sig = sig * amp;
@@ -239,7 +256,7 @@ SynthDef.new(\sample13, {
 SynthDef.new(\sample14, {
 	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
-	sig = PlayBuf.ar(1,13, BufRateScale.ir(13)*rate, doneAction: 2);
+	sig = PlayBuf.ar(2,13, BufRateScale.ir(13)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
 	sig = sig * env;
 	sig = sig * amp;
@@ -251,7 +268,7 @@ SynthDef.new(\sample14, {
 SynthDef.new(\sample15, {
 	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
-	sig = PlayBuf.ar(1,14, BufRateScale.ir(14)*rate, doneAction: 2);
+	sig = PlayBuf.ar(2,14, BufRateScale.ir(14)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
 	sig = sig * env;
 	sig = sig * amp;
@@ -263,7 +280,7 @@ SynthDef.new(\sample15, {
 SynthDef.new(\sample16, {
 	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
-	sig = PlayBuf.ar(1,15, BufRateScale.ir(15)*rate, doneAction: 2);
+	sig = PlayBuf.ar(2,15, BufRateScale.ir(15)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
 	sig = sig * env;
 	sig = sig * amp;
@@ -299,7 +316,7 @@ Pdef(
 	Pbind(
 		\instrument, Pfunc({ |e| e.instrument}),
 		\dur, Pdefn(\dur1),
-		\decayTime, 0.5,
+		\decayTime, 1,
 		\rate, 1,
 		\amp, 0.3,
 		\outBus, ~b1,
@@ -384,10 +401,10 @@ Pdef(\pattern2).set(\instrument,\sample4);
 Pdef(\pattern3).set(\instrument,\sample16);
 Pdef(\pattern4).set(\instrument,\sample14);
 
-Pdefn(\dur1,Pseq(p[0], inf));
+Pdefn(\dur1,Pseq(p[13], inf));
 Pdefn(\dur2,Pseq(p[6], inf));
 Pdefn(\dur3,Pseq(p[10], inf));
-Pdefn(\dur4,Pseq(p[3], inf));
+Pdefn(\dur4,Pseq(p[14], inf));
 
 
 
@@ -850,24 +867,10 @@ OSCdef.new(
 
 // ~cSampState = 0;
 //~modes[0]=1;
+
 ~synapseSend.sendMsg("/righthand", \forward);
 ~synapseSend.sendMsg("/righthand", \up);
 ~synapseSend.sendMsg("/lefthand", \forward);
 ~synapseSend.sendMsg("/lefthand", \up);
 
-/*~local = NetAddr("127.0.0.1",12000);
-~local.sendMsg("/mode/1/4", 1);
-~local.sendMsg("/mode/1/3", 0);*/
-
-
-
 )
-
-
-Pdef(\pattern1)
-
-Pdefn(\dur1,Pseq([0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.125, 0.125,
-	0.125, 0.125, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.3333, 0.3333,
-	0.3334], inf));
-
-t.stop;
