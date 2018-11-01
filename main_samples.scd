@@ -55,22 +55,22 @@ r = Routine({
 ];*/
 
 p = [
-	[1],
-	[0.5],
-	[0.25],
-	[1, 1, 1.25, 0.25, 0.50],
-	[1, Rest(0.5), 1.5, 1],
-	[1, Rest(1.5), 1.5],
-	[Rest(0.5), 0.5], //hatclosed
-	[Rest(0.5), 0.25, 0.25],
-	[0.5, 0.5, Rest(0.25), 0.75],
-	[0.75, 0.75, 0.75, 1.75],
-	[Rest(1), 1], //clap/snare
-	[Rest(2), 2],
-	[0.5, Rest(1.5), 0.5, 0.5, Rest(1)],
-	[0.75, 1.25, 0.75, 1.25], //kick
-	[Rest(1.75), 0.5, 0.5, Rest(1.25)], //rimshot
-	[Rest(0.50), 0.75, 0.25, Rest(0.75), 0.25, 0.5, 1]
+	[0.25, Rest(0.25), Rest(0.25), Rest(0.25), 0.25, Rest(0.25), Rest(0.25), Rest(0.25), 0.25, Rest(0.25), Rest(0.25), Rest(0.25), 0.25, Rest(0.25), Rest(0.25), Rest(0.25)],
+	[0.25, Rest(0.25), 0.25, Rest(0.25), 0.25, Rest(0.25), 0.25, Rest(0.25), 0.25, Rest(0.25), 0.25, Rest(0.25), 0.25, Rest(0.25), 0.25, Rest(0.25)],
+	[0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25],  //hatclosed
+	[0.25, Rest(0.25), Rest(0.25), Rest(0.25), 0.25, Rest(0.25), Rest(0.25), Rest(0.25), 0.25, Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), 0.25, 0.25, Rest(0.25)],
+	[0.25, Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), 0.25, Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), 0.25, Rest(0.25), Rest(0.25), Rest(0.25)],
+	[0.25, Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), 0.25, Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25)],
+	[Rest(0.25), Rest(0.25), 0.25, Rest(0.25), Rest(0.25), Rest(0.25), 0.25, Rest(0.25), Rest(0.25), Rest(0.25), 0.25, Rest(0.25), Rest(0.25), Rest(0.25), 0.25, Rest(0.25)],
+	[Rest(0.25), Rest(0.25), 0.25, 0.25, Rest(0.25), Rest(0.25), 0.25, 0.25, Rest(0.25), Rest(0.25), 0.25, 0.25, Rest(0.25), Rest(0.25), 0.25, 0.25],
+	[0.25, Rest(0.25), 0.25, Rest(0.25), Rest(0.25), 0.25, Rest(0.25), Rest(0.25), 0.25, Rest(0.25), 0.25, Rest(0.25), Rest(0.25), 0.25, Rest(0.25), Rest(0.25)],
+	[0.25, Rest(0.25), Rest(0.25), 0.25, Rest(0.25), Rest(0.25), 0.25, Rest(0.25), Rest(0.25), 0.25, Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25)],
+	[Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), 0.25, Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), 0.25, Rest(0.25), Rest(0.25), Rest(0.25)], //clap/snare
+	[Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), 0.25, Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25)],
+	[0.25, Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), 0.25, Rest(0.25), 0.25, Rest(0.25), 0.25, Rest(0.25), Rest(0.25), Rest(0.25)],
+	[0.25, Rest(0.25), Rest(0.25), 0.25, Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), 0.25, Rest(0.25), Rest(0.25), 0.25, Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25)], //kick
+	[Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), 0.25, Rest(0.25), 0.25, Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25), Rest(0.25)], //rimshot
+	[Rest(0.25), Rest(0.25), 0.25, Rest(0.25), Rest(0.25), 0.25, Rest(0.25), Rest(0.25), Rest(0.25), 0.25, 0.25, Rest(0.25), 0.25, Rest(0.25), Rest(0.25), Rest(0.25)]
 ];
 
 i = [
@@ -172,7 +172,7 @@ SynthDef.new(\sample6, {
 SynthDef.new(\sample7, {
 	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
-	sig = PlayBuf.ar(2,6, BufRateScale.ir(6)*rate, doneAction: 2);
+	sig = PlayBuf.ar(1,6, BufRateScale.ir(6)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
 	sig = sig * env;
 	sig = sig * amp;
@@ -208,7 +208,7 @@ SynthDef.new(\sample9, {
 SynthDef.new(\sample10, {
 	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
-	sig = PlayBuf.ar(2,9, BufRateScale.ir(9)*rate, doneAction: 2);
+	sig = PlayBuf.ar(1,9, BufRateScale.ir(9)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
 	sig = sig * env;
 	sig = sig * amp;
@@ -232,7 +232,7 @@ SynthDef.new(\sample11, {
 SynthDef.new(\sample12, {
 	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
 	var sig, env;
-	sig = PlayBuf.ar(2,11, BufRateScale.ir(11)*rate, doneAction: 2);
+	sig = PlayBuf.ar(1,11, BufRateScale.ir(11)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
 	sig = sig * env;
 	sig = sig * amp;
@@ -278,7 +278,7 @@ SynthDef.new(\sample15, {
 //SAMPLE16
 
 SynthDef.new(\sample16, {
-	arg rate = 1, amp=0.5, decayTime = 0, outBus = 0;
+	arg rate = 1, amp=1, decayTime = 0, outBus = 0;
 	var sig, env;
 	sig = PlayBuf.ar(2,15, BufRateScale.ir(15)*rate, doneAction: 2);
 	env = EnvGen.ar(Env.adsr(0,decayTime,0,1));
@@ -316,9 +316,9 @@ Pdef(
 	Pbind(
 		\instrument, Pfunc({ |e| e.instrument}),
 		\dur, Pdefn(\dur1),
-		\decayTime, 1,
+		\decayTime, 0.5,
+		\amp, 0.4,
 		\rate, 1,
-		\amp, 0.3,
 		\outBus, ~b1,
 		\x, Pfunc ({ |evt|
 			if(evt.isRest == false){
@@ -335,9 +335,9 @@ Pdef(
 	Pbind(
 		\instrument, Pfunc({ |e| e.instrument}),
 		\dur, Pdefn(\dur2),
-		\decayTime, 0.5,
+		\decayTime, 0.2,
+		\amp, Pseq([0.05, 0.1, 0.15, 0.2], inf),
 		\rate, 1,
-		\amp, 0.3,
 		\outBus, ~b1,
 		\x, Pfunc ({ |evt|
 			if(evt.isRest == false){
@@ -355,8 +355,8 @@ Pdef(
 		\instrument, Pfunc({ |e| e.instrument}),
 		\dur, Pdefn(\dur3),
 		\decayTime, 0.5,
+		\amp, 0.5,
 		\rate, 1,
-		\amp, 0.3,
 		\outBus, ~b1,
 		\x, Pfunc ({ |evt|
 			if(evt.isRest == false){
@@ -374,9 +374,9 @@ Pdef(
 	Pbind(
 		\instrument, Pfunc({ |e| e.instrument}),
 		\dur, Pdefn(\dur4),
-		\decayTime, 0.5,
-		\rate, 1,
-		\amp, 0.3,
+		\decayTime, 1,
+		\amp, 0.1,
+		\rate, 0.9,
 		\outBus, ~b1,
 		\x, Pfunc ({ |evt|
 			if(evt.isRest == false){
@@ -401,10 +401,10 @@ Pdef(\pattern2).set(\instrument,\sample4);
 Pdef(\pattern3).set(\instrument,\sample16);
 Pdef(\pattern4).set(\instrument,\sample14);
 
-Pdefn(\dur1,Pseq(p[13], inf));
+Pdefn(\dur1,Pseq(p[0], inf));
 Pdefn(\dur2,Pseq(p[6], inf));
 Pdefn(\dur3,Pseq(p[10], inf));
-Pdefn(\dur4,Pseq(p[14], inf));
+Pdefn(\dur4,Pseq(p[3], inf));
 
 
 

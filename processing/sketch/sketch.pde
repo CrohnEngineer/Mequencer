@@ -36,8 +36,7 @@ class StepButton {
     this.activeColor[0] = activeColor[0];
     this.activeColor[1] = activeColor[1];
     this.activeColor[2] = activeColor[2];
-
-}
+  }
 
   void display() {
     if (isPlaying == false) {
@@ -102,10 +101,11 @@ class Sequence {
     isPlaying = false;
     steps[playingStep].isPlaying = false;
   }
-  
-  void reset(){
+
+  void reset() {
     for (int i = 0; i<steps.length; i++) {
-      steps[i].isActive = false;;
+      steps[i].isActive = false;
+      ;
     }
   }
 }
@@ -191,9 +191,9 @@ int[][] patterns = {
   {1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0}, 
   {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0}, 
   {0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0}, 
-  {1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0}, 
-  {1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1}, 
-  {1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0}, 
+  {1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0}, 
+  {1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0}, 
+  {0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0}, 
   {0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0}
 };
 
@@ -233,24 +233,24 @@ void setup() {
   firstStepPos4[1] = height/3 + 75;
 
   cp5 = new ControlP5(this);
-  samples = Arrays.asList("Bell", "Clap", "Cymbal", "Hat Closed", "Hat Open", "High Clave", "High Tom", "Kick",
-                               "Low Clave", "Low Tom", "Mid Clave", "Mid Tom", "Pluck", "Rimshot", "Shaker", "Snare");
+  samples = Arrays.asList("Bell", "Clap", "Cymbal", "Hat Closed", "Hat Open", "High Clave", "High Tom", "Kick", 
+    "Low Clave", "Low Tom", "Mid Clave", "Mid Tom", "Pluck", "Rimshot", "Shaker", "Snare");
   sequences = Arrays.asList("•___•___•___•___", 
-                                 "•_•_•_•_•_•_•_•_", 
-                                 "••••••••••••••••", 
-                                 "•___•___•____••_",
-                                 "•_____•_____•___", 
-                                 "•_________•_____", 
-                                 "__•___•___•___•_",
-                                 "__••__••__••__••", 
-                                 "•_•__•__•_•__•__", 
-                                 "•__•__•__•______", 
-                                 "____•_______•___", 
-                                 "________•_______", 
-                                 "•_______•_•_____", 
-                                 "••••____•_••_•_•", 
-                                 "•_•____••_•_____", 
-                                 "__•__•___••_•___");
+                            "•_•_•_•_•_•_•_•_", 
+                            "••••••••••••••••", 
+                            "•___•___•____••_", 
+                            "•_____•_____•___", 
+                            "•_________•_____", 
+                            "__•___•___•___•_", 
+                            "__••__••__••__••", 
+                            "•_•__•__•_•__•__", 
+                            "•__•__•__•______", 
+                            "____•_______•___", 
+                            "________•_______", 
+                            "•_______•_•_•___", 
+                            "•__•____•__•____", 
+                            "_______•_•______", 
+                            "__•__•___••_•___");
 
 
   /* Sample list for pattern A */
@@ -459,12 +459,11 @@ void setup() {
       index++;
     }
   }
-  
+
   sequence1.setSteps(patterns[0]);
   sequence2.setSteps(patterns[6]);
   sequence3.setSteps(patterns[10]);
   sequence4.setSteps(patterns[3]);
-
 }
 
 
@@ -486,7 +485,7 @@ void draw() {
     }
     background(62 + ((int) cutoffValMap));
     colStep = 255 - (int) cutoffValMap;
-    
+
 
     fill(255 - (int) cutoffValMap);
     textAlign(CENTER);
@@ -726,49 +725,49 @@ void oscEvent(OscMessage theOscMessage) {
     break;
   case "/change_sample":
     switch((int) theOscMessage.arguments()[0]) {
-      case 1:
-        sampleA((int) theOscMessage.arguments()[1]);
-        cp5.getController("sampleA").setLabel(samples.get((int) theOscMessage.arguments()[1]));
-        break;
-      case 2:
-        sampleB((int) theOscMessage.arguments()[1]);
-        cp5.getController("sampleB").setLabel(samples.get((int) theOscMessage.arguments()[1]));
-        break;
-      case 3:
-        sampleC((int) theOscMessage.arguments()[1]);
-        cp5.getController("sampleC").setLabel(samples.get((int) theOscMessage.arguments()[1]));
-        break;
-      case 4:
-        sampleD((int) theOscMessage.arguments()[1]);
-        cp5.getController("sampleD").setLabel(samples.get((int) theOscMessage.arguments()[1]));
-        break;
-      default:
-        break;
+    case 1:
+      sampleA((int) theOscMessage.arguments()[1]);
+      cp5.getController("sampleA").setLabel(samples.get((int) theOscMessage.arguments()[1]));
+      break;
+    case 2:
+      sampleB((int) theOscMessage.arguments()[1]);
+      cp5.getController("sampleB").setLabel(samples.get((int) theOscMessage.arguments()[1]));
+      break;
+    case 3:
+      sampleC((int) theOscMessage.arguments()[1]);
+      cp5.getController("sampleC").setLabel(samples.get((int) theOscMessage.arguments()[1]));
+      break;
+    case 4:
+      sampleD((int) theOscMessage.arguments()[1]);
+      cp5.getController("sampleD").setLabel(samples.get((int) theOscMessage.arguments()[1]));
+      break;
+    default:
+      break;
     }
-  break;
+    break;
   case "/change_sequence":
-      switch((int) theOscMessage.arguments()[0]) {
-      case 1:
-        seq1((int) theOscMessage.arguments()[1]);
-        cp5.getController("seq1").setLabel(sequences.get((int) theOscMessage.arguments()[1]));
-        break;
-      case 2:
-        seq2((int) theOscMessage.arguments()[1]);
-        cp5.getController("seq2").setLabel(sequences.get((int) theOscMessage.arguments()[1]));
-        break;
-      case 3:
-        seq3((int) theOscMessage.arguments()[1]);
-        cp5.getController("seq3").setLabel(sequences.get((int) theOscMessage.arguments()[1]));
-        break;
-      case 4:
-        seq4((int) theOscMessage.arguments()[1]);
-        cp5.getController("seq4").setLabel(sequences.get((int) theOscMessage.arguments()[1]));
-        break;
-      default:
-        break;
-      }
-  break;
+    switch((int) theOscMessage.arguments()[0]) {
+    case 1:
+      seq1((int) theOscMessage.arguments()[1]);
+      cp5.getController("seq1").setLabel(sequences.get((int) theOscMessage.arguments()[1]));
+      break;
+    case 2:
+      seq2((int) theOscMessage.arguments()[1]);
+      cp5.getController("seq2").setLabel(sequences.get((int) theOscMessage.arguments()[1]));
+      break;
+    case 3:
+      seq3((int) theOscMessage.arguments()[1]);
+      cp5.getController("seq3").setLabel(sequences.get((int) theOscMessage.arguments()[1]));
+      break;
+    case 4:
+      seq4((int) theOscMessage.arguments()[1]);
+      cp5.getController("seq4").setLabel(sequences.get((int) theOscMessage.arguments()[1]));
+      break;
+    default:
+      break;
+    }
+    break;
   default:
-  break;
+    break;
   }
 }
